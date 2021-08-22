@@ -1,5 +1,7 @@
+#ifndef PROCESSOSIMULADO_H
+#define PROCESSOSIMULADO_H
 
-#include <Instrucao.h>
+#include "Instrucao.h"
 
 typedef struct {
     int idProcesso;
@@ -34,3 +36,5 @@ void instrucaoT(ProcessoSimulado* proc);
 void instrucaoV(ProcessoSimulado* proc);
 
 void finalizarProcesso(ProcessoSimulado* proc);
+
+#endif

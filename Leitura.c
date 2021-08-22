@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include <Leitura.h>
+#include "Leitura.h"
 
 void lerTerminal(Pipe *p) {
     char c=' ';

@@ -1,6 +1,9 @@
 
-#include <Menu.h>
-#include <Leitura.h>
+#include <stdio.h>
+#include <stdlib.h>
+
+#include "Menu.h"
+#include "Leitura.h"
 
 void menu(Pipe *p) {
     int op = -1;

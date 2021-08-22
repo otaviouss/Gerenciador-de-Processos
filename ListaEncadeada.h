@@ -1,3 +1,5 @@
+#ifndef LISTAENCADEADA_H
+#define LISTAENCADEADA_H
 
 typedef struct Celula* Apontador;
 
@@ -20,3 +22,5 @@ int InsereIndice(Lista* lista, int* indice);
 int RetiraIndice(Lista* lista, int* indice);
 
 void ImprimeIndices(Lista* lista);
+
+#endif

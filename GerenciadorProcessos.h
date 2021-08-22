@@ -1,6 +1,9 @@
-#include <ListaEncadeada.h>
-#include <CPU.h>
-#include <ProcessoSimulado.h>
+#ifndef GERENCIADOR_H
+#define GERENCIADOR_H
+
+#include "ListaEncadeada.h"
+#include "CPU.h"
+#include "ProcessoSimulado.h"
 
 typedef struct {
     int tempo;
@@ -16,3 +19,5 @@ void inicializaGerenciador(GerenciadorProcessos *gProc);
 void comandoL();
 
 void trocaContexto(GerenciadorProcessos *gProc);
+
+#endif

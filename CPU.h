@@ -1,5 +1,7 @@
+#ifndef CPU_H
+#define CPU_H
 
-#include <ProcessoSimulado.h>
+#include "ProcessoSimulado.h"
 
 typedef struct {
     ProcessoSimulado* processo;
@@ -9,3 +11,5 @@ typedef struct {
 void inicializaCPU(CPU* cpu);
 
 void executaProcesso(CPU* cpu);
+
+#endif
