@@ -1,15 +1,15 @@
 
 typedef union {
-    struct {
+    struct Tipo1 {
         char i;
         int num;
     };
-    struct {
+    struct Tipo2 {
         char i;
         int n1;
         int n2;
     };
-    struct {
+    struct Tipo3 {
         char i;
         char arq[50];
     };

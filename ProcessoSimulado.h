@@ -32,3 +32,5 @@ void instrucaoS(ProcessoSimulado* proc);
 void instrucaoT(ProcessoSimulado* proc);
 
 void instrucaoV(ProcessoSimulado* proc);
+
+void finalizarProcesso(ProcessoSimulado* proc);
