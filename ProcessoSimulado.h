@@ -17,24 +17,27 @@ typedef struct {
 
 void InicializaProcessoSimulado(ProcessoSimulado* proc);
 
-void instrucaoA(ProcessoSimulado* proc);
+void instrucaoA(ProcessoSimulado* proc, Instrucao *ins);
 
 void instrucaoB(ProcessoSimulado* proc);
 
-void instrucaoD(ProcessoSimulado* proc);
+void instrucaoD(ProcessoSimulado* proc, Instrucao ins);
 
-void instrucaoF(ProcessoSimulado* proc);
+void instrucaoF(ProcessoSimulado* proc, ProcessoSimulado *procCopia, int n);
 
-void instrucaoN(ProcessoSimulado* proc);
+int instrucaoN(Instrucao *ins);
 
 void instrucaoR(ProcessoSimulado* proc);
 
-void instrucaoS(ProcessoSimulado* proc);
+void instrucaoS(ProcessoSimulado* proc, Instrucao ins);
 
 void instrucaoT(ProcessoSimulado* proc);
 
-void instrucaoV(ProcessoSimulado* proc);
+void instrucaoV(ProcessoSimulado* proc, Instrucao ins);
 
 void finalizarProcesso(ProcessoSimulado* proc);
 
+void mostrarRelatorioProcesso(ProcessoSimulado *proc);
+
+int geraIdProcesso(int *n);
 #endif
