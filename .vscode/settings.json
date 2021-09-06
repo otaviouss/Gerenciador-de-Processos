@@ -1,5 +1,8 @@
 {
     "files.associations": {
-        "gerenciadorprocessos.h": "c"
+        "gerenciadorprocessos.h": "c",
+        "leitura.h": "c",
+        "menu.h": "c",
+        "pipe.h": "c"
     }
 }

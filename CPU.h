@@ -4,12 +4,16 @@
 #include "ProcessoSimulado.h"
 
 typedef struct {
-    ProcessoSimulado* processo;
+    ProcessoSimulado processo;
     int unidadeTempo;
 } CPU;
 
 void inicializaCPU(CPU* cpu);
 
-void executaProcesso(CPU* cpu);
+void insereProcessoCPU(CPU* cpu, ProcessoSimulado p); 
+
+void executaProcessoCPU(CPU* cpu);
+
+void pararProcessoCPU(CPU* cpu, ProcessoSimulado* p);
 
 #endif

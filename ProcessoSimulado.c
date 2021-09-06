@@ -3,6 +3,24 @@
 #include <stdio.h>
 #include <string.h>
 
+void InicializaProcessoSimulado(ProcessoSimulado* proc, int idProcesso, int idProcessoPai,
+    int contadorPrograma, int *buffer, int prioridade, int estado, 
+    int tempoIncio, int tempoCPU, Instrucao* programa) {
+        proc->buffer = buffer;
+        proc->contadorPrograma = contadorPrograma;
+        proc->estado = estado;
+        proc->idProcesso = idProcesso;
+        proc->idProcessoPai = idProcessoPai;
+        proc->prioridade = prioridade;
+        proc->programa = programa;
+        proc->tempoCPU = tempoCPU;
+        proc->tempoIncio = tempoIncio;
+}
+
+void executaProximaInstrucao(ProcessoSimulado* proc) {
+    
+}
+
 void instrucaoA(ProcessoSimulado* proc, Instrucao *ins){
     proc->programa->n1 += ins->n1;
 }

@@ -15,7 +15,11 @@ typedef struct {
     Instrucao* programa;
 } ProcessoSimulado;
 
-void InicializaProcessoSimulado(ProcessoSimulado* proc);
+void InicializaProcessoSimulado(ProcessoSimulado* proc, int idProcesso, int idProcessoPai,
+    int contadorPrograma, int *buffer, int prioridade, int estado, 
+    int tempoIncio, int tempoCPU, Instrucao* programa);
+
+void executaProximaInstrucao(ProcessoSimulado* proc);
 
 void instrucaoA(ProcessoSimulado* proc, Instrucao *ins);
 
@@ -27,7 +31,7 @@ void instrucaoF(ProcessoSimulado* proc, ProcessoSimulado *procCopia, int n);
 
 int instrucaoN(Instrucao *ins);
 
-void instrucaoR(ProcessoSimulado* proc);
+void instrucaoR(ProcessoSimulado* proc, Instrucao instr);
 
 void instrucaoS(ProcessoSimulado* proc, Instrucao ins);
 

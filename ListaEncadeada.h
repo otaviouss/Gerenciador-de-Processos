@@ -17,7 +17,7 @@ void FLVazia(Lista* lista);
 
 int LehVazia(Lista* lista);
 
-int InsereIndice(Lista* lista, int* indice);
+int InsereIndice(Lista* lista, int indice);
 
 int RetiraIndice(Lista* lista, int* indice);
 

@@ -13,10 +13,10 @@ int LehVazia(Lista* lista) {
     return(lista->pPrimeiro == lista->pUltimo);
 }
 
-int InsereIndice(Lista* lista, int* indice) {
+int InsereIndice(Lista* lista, int indice) {
     lista->pUltimo->pProx = (Apontador) malloc(sizeof(Celula));
     lista->pUltimo = lista->pUltimo->pProx;
-    lista->pUltimo->indiceProcesso = *indice;
+    lista->pUltimo->indiceProcesso = indice;
     lista->pUltimo->pProx = NULL;
 }
 
