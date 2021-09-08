@@ -5,8 +5,11 @@
 
 #include "Pipe.h"
 
-void escreverPipe(Pipe *p, char inst) {
+void inicializarPipe(Pipe *p) {
     pipe(p->filedes);
+}
+
+void escreverPipe(Pipe *p, char inst) {
     write(p->filedes[1], &inst, 1);
 }
 

@@ -5,13 +5,13 @@
 #include "Leitura.h"
 
 void lerTerminal(Pipe *p) {
+    inicializarPipe(p);
     char c=' ';
     while(c != 'M') {
         scanf(" %c", &c);
         escreverPipe(p, c);
     }
     char *buffer;
-    lerPipe(p, buffer);
 }
 
 void lerArquivo() {
