@@ -1,3 +1,5 @@
+#ifndef INSTRUCAO_H
+#define INSTRUCAO_H
 
 typedef union {
     char i;
@@ -6,3 +8,5 @@ typedef union {
     int n2;
     char arq[50];
 } Instrucao;
+
+#endif

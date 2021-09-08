@@ -78,7 +78,7 @@ void instrucaoV(ProcessoSimulado* proc, Instrucao ins){
 void mostrarRelatorioProcesso(ProcessoSimulado *proc){
     printf("----- Processo Finalizado -----\n");
     printf("PID: &d\n", proc->idProcesso);
-    printf("Temṕo em CPU: &d\n", proc->tempoCPU);
+    printf("Tempo em CPU: &d\n", proc->tempoCPU);
     printf("-------------------------------\n\n");
 }
 

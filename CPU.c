@@ -16,5 +16,4 @@ void executaProcessoCPU(CPU* cpu) {
 
 void pararProcessoCPU(CPU* cpu, ProcessoSimulado* p) {
     *p = cpu->processo;
-    free(cpu->processo);
 }

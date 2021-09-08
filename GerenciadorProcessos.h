@@ -4,6 +4,7 @@
 #include "ListaEncadeada.h"
 #include "CPU.h"
 #include "ProcessoSimulado.h"
+#include "Pipe.h"
 
 typedef struct {
     int tempo;
@@ -17,8 +18,16 @@ typedef struct {
 
 void inicializaGerenciador(GerenciadorProcessos *gProc);
 
+void executaGerenciador(GerenciadorProcessos *gProc, Pipe *p);
+
 void comandoL(GerenciadorProcessos *gProc);
 
 void trocaContexto(GerenciadorProcessos *gProc);
+
+void escalonarProcessos(GerenciadorProcessos *gProc);
+
+void substituirImagem(GerenciadorProcessos *gProc, ProcessoSimulado *proc);
+
+void processoImpressao(GerenciadorProcessos *gProc);
 
 #endif

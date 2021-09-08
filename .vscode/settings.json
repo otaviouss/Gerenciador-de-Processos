@@ -3,6 +3,7 @@
         "gerenciadorprocessos.h": "c",
         "leitura.h": "c",
         "menu.h": "c",
-        "pipe.h": "c"
+        "pipe.h": "c",
+        "unistd.h": "c"
     }
 }

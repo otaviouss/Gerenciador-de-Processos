@@ -19,10 +19,10 @@ void menu(Pipe *p) {
         switch (op) {
             case 1:
                 lerTerminal(p);
-                break;
+                return;
             case 2:
                 lerArquivo();
-                break;
+                return;
             case 0:
                 break;
             default:

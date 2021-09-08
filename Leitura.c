@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "Leitura.h"
 
@@ -9,6 +10,8 @@ void lerTerminal(Pipe *p) {
         scanf(" %c", &c);
         escreverPipe(p, c);
     }
+    char *buffer;
+    lerPipe(p, buffer);
 }
 
 void lerArquivo() {

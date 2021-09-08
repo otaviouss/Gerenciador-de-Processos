@@ -7,7 +7,7 @@ typedef struct {
     int idProcesso;
     int idProcessoPai;
     int contadorPrograma;
-    int *buffer;
+    int *buffer; //memória
     int prioridade;
     int estado;
     int tempoIncio;

@@ -11,7 +11,8 @@ int main() {
     GerenciadorProcessos gProc;
 
     menu(&p);
-    // inicializaGerenciador(&gProc);    
+    inicializaGerenciador(&gProc);    
+    executaGerenciador(&gProc, &p);
 
     return 0;
 }
