@@ -21,6 +21,7 @@ void InicializaProcessoSimulado(ProcessoSimulado* proc, int idProcesso, int idPr
 
 void executaProximaInstrucao(ProcessoSimulado* proc) {
     Instrucao inst = proc->programa[proc->contadorPrograma]; // Pega a próxima instrucao
+    printf("Instrução Atual: %c\n", inst.i);
     if(inst.i == 'N') {
         instrucaoN(proc, inst);
         ++proc->contadorPrograma;

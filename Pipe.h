@@ -9,6 +9,6 @@ void inicializarPipe(Pipe *p);
 
 void escreverPipe(Pipe *p, char inst);
 
-void lerPipe(Pipe *p, char *inst);
+void lerPipe(Pipe *p, char **inst);
 
 #endif

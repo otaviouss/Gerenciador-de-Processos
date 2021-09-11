@@ -27,22 +27,24 @@ void inicializaGerenciador(GerenciadorProcessos *gProc) {
 
 void executaGerenciador(GerenciadorProcessos *gProc, Pipe *p) {
     ProcessoSimulado processo;
-    Instrucao inst;
+    Instrucao *inst;
     char *instPipe;
-    int *buffer, tam, i;
+    int *buffer, i;
+    size_t tam;
     CPU cpu;
 
     printf("Criando Processo Simulado...");
 
     lerArquivoDeInstrucoesPS(&inst);
 
-    InicializaProcessoSimulado(&processo, 0, -1, 0, buffer, 0, 2, 0, 0, &inst);
+    InicializaProcessoSimulado(&processo, 0, -1, 0, buffer, 0, 2, 0, 0, inst);
     gProc->tabelaDeProcessos[gProc->ult] = processo;
     gProc->ult++;
     inicializaCPU(&cpu);
     insereProcessoCPU(&cpu, processo);
+    gProc->estadoExecucao = 0;
 
-    lerPipe(p, instPipe);
+    lerPipe(p, &instPipe);
 
     tam = strlen(instPipe);
     for(i=0; i<tam; i++) {
@@ -68,9 +70,7 @@ void executaGerenciador(GerenciadorProcessos *gProc, Pipe *p) {
             processoImpressao(gProc);
             return;
         }
-    }
-    
-    
+    }   
 }
 
 /** Ao receber um comando L, gerenciador de processos move o primeiro

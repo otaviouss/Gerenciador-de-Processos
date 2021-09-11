@@ -55,18 +55,11 @@ void lerArquivo(Pipe *p) {
 /** Lê instruções de um processo simulado
  * por meio de arquivo
  */
-void lerArquivoDeInstrucoesPS(Instrucao *instrucoes) {
+void lerArquivoDeInstrucoesPS(Instrucao **instrucoes) {
     FILE *arq;
     char c;
-    instrucoes = (Instrucao*)malloc(1000* sizeof(Instrucao)); //Maximo de 1000 instrucoes pra reduzir trabalho
-    int posInstr = 0;          //Qual a linha da instrucao (Max 100 linhas);
-
-    /*Qual o parametro que e: V(0) 0(1) 1000(2)
-     * 0 - i
-     * 1 - n1
-     * 2 - n2
-    */
-    int numeroParametro = 0;
+    (*instrucoes) = (Instrucao*)malloc(1000* sizeof(Instrucao)); //Maximo de 1000 instrucoes pra reduzir trabalho
+    int posInstr = 0;          //Qual a linha da instrucao (Max 1000 linhas);
 
     char nomeDoArquivo[50];
 
@@ -81,58 +74,29 @@ void lerArquivoDeInstrucoesPS(Instrucao *instrucoes) {
         return;
     }
 
-    while(1){
+    while(!feof(arq)){
         c = fgetc(arq);
-
-        if(c == 32) { //Se for espaco, e o pro proximo parametro
-            numeroParametro++;
-            c = fgetc(arq);
-
-        }else if (c == '\n') { //Se for quebra de linha, e a proxima instrucao
-            posInstr++;
-            numeroParametro = 0;
-            c = fgetc(arq);
-
-        }else if(c == EOF){
-            break;
+        (*instrucoes)[posInstr].i = c;
+        if(c=='N' || c=='D' || c=='F') {
+            fscanf(arq, "%d", &(*instrucoes)[posInstr].n1);
+        } else if(c=='V' || c=='A' || c=='S') {
+            fscanf(arq, "%d %d", &(*instrucoes)[posInstr].n1, &(*instrucoes)[posInstr].n2);
+        } else if(c=='R') {
+            fscanf(arq, "%s", (*instrucoes)[posInstr].arq);
         }
-
-        switch (numeroParametro){
-
-            case 0:{
-                instrucoes[posInstr].i = c;
-                break;
-            }
-
-            case 1:{
-
-                if(instrucoes[posInstr].i != 'R'){
-                    instrucoes[posInstr].n1 = c;
-
-                }else{ //Se a instrucao for R entao tem que ler o nome do arquivo
-
-                    int cont = 0; //posicao de cada caracter
-                    while(1){
-                        c = fgetc(arq);
-                        if(c == '\n' || c == EOF){
-                            break;
-                        }
-                        instrucoes[posInstr].arq[cont] = c;
-                        cont++;
-                    }
-                }
-
-                break;
-            }
-
-            case 2:{
-                instrucoes[posInstr].n2 = (int)c;
-                break;
-            }
-
-        }
+        ++posInstr;
+        c = fgetc(arq);
     }
-
+    /*
+    int i;
+    for(i=0;i<30;i++) {
+        printf("Instrucao %d\n", i);
+        printf("Char i: %c\n", instrucoes[i].i);
+        printf("Integer 1: %d\n", instrucoes[i].n1);
+        printf("Integer 2: %d\n", instrucoes[i].n2);
+        printf("Num: %d\n", instrucoes[i].num);
+        printf("Arquivo: %s\n\n", instrucoes[i].arq);
+    }*/
 }
 
 void lerArquivoPS(Instrucao *instrucoes, char nomeDoArquivo[50]) {
@@ -156,56 +120,18 @@ void lerArquivoPS(Instrucao *instrucoes, char nomeDoArquivo[50]) {
         return;
     }
 
-    while(1){
+    while(!feof(arq)){
         c = fgetc(arq);
-
-        if(c == 32) { //Se for espaco, e o pro proximo parametro
-            numeroParametro++;
-            c = fgetc(arq);
-
-        }else if (c == '\n') { //Se for quebra de linha, e a proxima instrucao
-            posInstr++;
-            numeroParametro = 0;
-            c = fgetc(arq);
-
-        }else if(c == EOF){
-            break;
+        instrucoes[posInstr].i = c;
+        if(c=='N' || c=='D' || c=='F') {
+            fscanf(arq, "%d", &instrucoes[posInstr].n1);
+        } else if(c=='V' || c=='A' || c=='S') {
+            fscanf(arq, "%d %d", &instrucoes[posInstr].n1, &instrucoes[posInstr].n2);
+        } else if(c=='R') {
+            fscanf(arq, "%s", instrucoes[posInstr].arq);
         }
-
-        switch (numeroParametro){
-
-            case 0:{
-                instrucoes[posInstr].i = c;
-                break;
-            }
-
-            case 1:{
-
-                if(instrucoes[posInstr].i != 'R'){
-                    instrucoes[posInstr].n1 = c;
-
-                }else{ //Se a instrucao for R entao tem que ler o nome do arquivo
-
-                    int cont = 0; //posicao de cada caracter
-                    while(1){
-                        c = fgetc(arq);
-                        if(c == '\n' || c == EOF){
-                            break;
-                        }
-                        instrucoes[posInstr].arq[cont] = c;
-                        cont++;
-                    }
-                }
-
-                break;
-            }
-
-            case 2:{
-                instrucoes[posInstr].n2 = (int)c;
-                break;
-            }
-
-        }
+        ++posInstr;
+        c = fgetc(arq);
     }
 
 }
