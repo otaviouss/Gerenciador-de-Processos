@@ -27,8 +27,8 @@ void inicializaGerenciador(GerenciadorProcessos *gProc) {
 }
 
 void executaGerenciador(GerenciadorProcessos *gProc, Pipe *p) {
-    ProcessoSimulado processo;
-    Instrucao *inst;
+    ProcessoSimulado processo; //colocar as intruções aqui
+    Instrucao *inst; //duplicar as instruições aqui
     char *instPipe;
     int *buffer, tam, i;
 

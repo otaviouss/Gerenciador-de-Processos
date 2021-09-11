@@ -44,4 +44,6 @@ void finalizarProcesso(ProcessoSimulado* proc);
 void mostrarRelatorioProcesso(ProcessoSimulado *proc);
 
 int geraIdProcesso(int *n);
+
+Instrucao* leArquivoDeInstrucoesPS();
 #endif
