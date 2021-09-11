@@ -18,4 +18,6 @@ void pararProcessoCPU(CPU *cpu, ProcessoSimulado *p);
 
 void comandoU(CPU *cpu);
 
+void mostrarProcessoCPU(CPU *cpu);
+
 #endif

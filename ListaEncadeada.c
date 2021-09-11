@@ -15,8 +15,8 @@ int LehVazia(Lista* lista) {
 
 void InsereIndice(Lista* lista, int indice, int p) {
     Celula *atual, *prox;
-    atual = lista->pPrimeiro->pProx; 
-    while (atual->pProx->prioridade <= p) {
+    atual = lista->pPrimeiro; 
+    while (atual->pProx != NULL && atual->pProx->prioridade <= p) {
         atual = atual->pProx;
     }
 

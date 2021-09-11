@@ -46,8 +46,7 @@ char executaProximaInstrucao(ProcessoSimulado* proc) {
         ++proc->contadorPrograma;
         return 'T';
     } else if(inst.i == 'F') {
-        
-        ++proc->contadorPrograma; //Não deve ficar aqui
+        return 'F';
     } else if(inst.i == 'R') {
         instrucaoR(proc, inst);
     }
@@ -82,25 +81,9 @@ void instrucaoB(ProcessoSimulado* proc){
     proc->estado = 0;
 }
 
-// Incompleta -> Resulta em troca de contexto
 void instrucaoT(ProcessoSimulado* proc){
     proc->estado = 3;
     mostrarRelatorioProcesso(proc);
-}
-
-// Incorreta (Usar fork)
-void instrucaoF(ProcessoSimulado* proc, ProcessoSimulado *procCopia, int n){
-    /*
-    procCopia->tempoCPU = proc->tempoCPU;
-    procCopia->idProcesso = geraIdProcesso(&n);
-    procCopia->estado = proc->estado;
-    procCopia->programa = procCopia->programa; //n tenho ctz se funciona
-    procCopia->buffer = proc->buffer;
-    procCopia->contadorPrograma = proc->contadorPrograma+1; //prox instr do pai
-    procCopia->idProcessoPai = proc->idProcesso;
-    procCopia->prioridade = proc->prioridade;
-    procCopia->tempoIncio = proc->tempoIncio;
-    */
 }
 
 void instrucaoR(ProcessoSimulado* proc, Instrucao inst){
@@ -115,6 +98,7 @@ void mostrarRelatorioProcesso(ProcessoSimulado *proc){
     printf("----- Relatorio Processo -----\n");
     printf("PID: %d\n", proc->idProcesso);
     printf("Tempo em CPU: %d\n", proc->tempoCPU);
+    printf("Prioridade: %d\n", proc->prioridade);
     printf("-------------------------------\n\n");
 }
 

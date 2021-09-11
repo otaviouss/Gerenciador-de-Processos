@@ -14,13 +14,14 @@ typedef struct {
     Lista estadoBloqueado;
     int estadoExecucao;
     int ult; // marca a posição seguinte à última posição preenchida do vetor tabelaDeProcessos
+    int indice; // ultimo indice utilizado
 } GerenciadorProcessos;
 
 void inicializaGerenciador(GerenciadorProcessos *gProc);
 
 void executaGerenciador(GerenciadorProcessos *gProc, Pipe *p);
 
-void executarProcessoSimulado(GerenciadorProcessos *gProc, char *instPipe, int indiceInst, CPU *cpu);
+void executarProcessoSimulado(GerenciadorProcessos *gProc, char *instPipe, int indiceInst);
 
 void comandoL(GerenciadorProcessos *gProc);
 

@@ -26,5 +26,14 @@ char executaProcessoCPU(CPU *cpu) {
 }
 
 void pararProcessoCPU(CPU *cpu, ProcessoSimulado *p) {
-    p = &cpu->processo;
+    *p = cpu->processo;
+}
+
+void mostrarProcessoCPU(CPU *cpu) {
+    printf("----- Relatorio Processo atualmente em execução -----\n");
+    printf("PID: %d\n", cpu->processo.idProcesso);
+    printf("Tempo em CPU: %d\n", cpu->processo.tempoCPU);
+    printf("Prioridade: %d\n", cpu->processo.prioridade);
+    printf("-------------------------------\n\n");
+    printf("Tempo Total: %d\n\n", cpu->unidadeTempo);
 }
