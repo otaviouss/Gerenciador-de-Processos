@@ -1,19 +1,23 @@
 #include "CPU.h"
+#include "GerenciadorProcessos.h"
 
-void inicializaCPU(CPU* cpu) {
+void inicializaCPU(CPU *cpu) {
     cpu->unidadeTempo = 0;
 }
 
-void insereProcessoCPU(CPU* cpu, ProcessoSimulado p) {
+void insereProcessoCPU(CPU *cpu, ProcessoSimulado p) {
     cpu->processo = p;
 }
 
-/**Chamada pelo comando U */
-void executaProcessoCPU(CPU* cpu) {
+/** Chamada pelo comando U 
+ * Executa próxima instrução do processo simulado
+*/
+void executaProcessoCPU(CPU *cpu) {
+    executaProximaInstrucao(&cpu->processo);
+    incrementaTempo(&cpu->processo);
     cpu->unidadeTempo++;
-    // Deve executar a próxima instrução do processo
 }
 
-void pararProcessoCPU(CPU* cpu, ProcessoSimulado* p) {
+void pararProcessoCPU(CPU *cpu, ProcessoSimulado *p) {
     *p = cpu->processo;
 }

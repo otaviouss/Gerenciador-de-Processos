@@ -26,11 +26,7 @@ void trocaContexto(GerenciadorProcessos *gProc);
 
 void escalonarProcessos(GerenciadorProcessos *gProc);
 
-void substituirImagem(GerenciadorProcessos *gProc, ProcessoSimulado *proc);
-
 void processoImpressao(GerenciadorProcessos *gProc);
-
-Instrucao* leArquivoDeInstrucoesGP();
 
 void insereProgramaNoProcessoSimulado(Instrucao *instProcess, Instrucao *ins);
 

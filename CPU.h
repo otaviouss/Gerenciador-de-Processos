@@ -8,12 +8,14 @@ typedef struct {
     int unidadeTempo;
 } CPU;
 
-void inicializaCPU(CPU* cpu);
+void inicializaCPU(CPU *cpu);
 
-void insereProcessoCPU(CPU* cpu, ProcessoSimulado p); 
+void insereProcessoCPU(CPU *cpu, ProcessoSimulado p); 
 
-void executaProcessoCPU(CPU* cpu);
+void executaProcessoCPU(CPU *cpu);
 
-void pararProcessoCPU(CPU* cpu, ProcessoSimulado* p);
+void pararProcessoCPU(CPU *cpu, ProcessoSimulado *p);
+
+void comandoU(CPU *cpu);
 
 #endif

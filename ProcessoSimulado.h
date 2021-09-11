@@ -6,13 +6,13 @@
 typedef struct {
     int idProcesso;
     int idProcessoPai;
-    int contadorPrograma;
-    int *buffer; //memória
+    int contadorPrograma; // Próxima instrucao a ser executada
+    int *buffer; // Memória
     int prioridade;
     int estado;
     int tempoIncio;
     int tempoCPU;
-    Instrucao* programa;
+    Instrucao* programa; // Instruções a serem executadas
 } ProcessoSimulado;
 
 void InicializaProcessoSimulado(ProcessoSimulado* proc, int idProcesso, int idProcessoPai,
@@ -21,29 +21,28 @@ void InicializaProcessoSimulado(ProcessoSimulado* proc, int idProcesso, int idPr
 
 void executaProximaInstrucao(ProcessoSimulado* proc);
 
-void instrucaoA(ProcessoSimulado* proc, Instrucao *ins);
+void instrucaoA(ProcessoSimulado* proc, Instrucao inst);
 
 void instrucaoB(ProcessoSimulado* proc);
 
-void instrucaoD(ProcessoSimulado* proc, Instrucao ins);
+void instrucaoD(ProcessoSimulado* proc, Instrucao inst);
 
 void instrucaoF(ProcessoSimulado* proc, ProcessoSimulado *procCopia, int n);
 
-int instrucaoN(Instrucao *ins);
+void instrucaoN(ProcessoSimulado* proc, Instrucao inst);
 
-void instrucaoR(ProcessoSimulado* proc, Instrucao instr);
+void instrucaoR(ProcessoSimulado* proc, Instrucao inst);
 
-void instrucaoS(ProcessoSimulado* proc, Instrucao ins);
+void instrucaoS(ProcessoSimulado* proc, Instrucao inst);
 
 void instrucaoT(ProcessoSimulado* proc);
 
-void instrucaoV(ProcessoSimulado* proc, Instrucao ins);
+void instrucaoV(ProcessoSimulado* proc, Instrucao inst);
 
 void finalizarProcesso(ProcessoSimulado* proc);
 
 void mostrarRelatorioProcesso(ProcessoSimulado *proc);
 
-int geraIdProcesso(int *n);
+void incrementaTempo(ProcessoSimulado *proc);
 
-Instrucao* leArquivoDeInstrucoesPS();
 #endif

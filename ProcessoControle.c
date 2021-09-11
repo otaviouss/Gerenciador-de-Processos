@@ -16,6 +16,5 @@ int main() {
     inicializaGerenciador(&gProc);    
     executaGerenciador(&gProc, &p);
 
-
     return 0;
 }

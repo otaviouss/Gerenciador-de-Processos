@@ -1,7 +1,9 @@
-#include "ProcessoSimulado.h"
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+
+#include "ProcessoSimulado.h"
+#include "Leitura.h"
 
 void InicializaProcessoSimulado(ProcessoSimulado* proc, int idProcesso, int idProcessoPai,
     int contadorPrograma, int *buffer, int prioridade, int estado, 
@@ -18,13 +20,56 @@ void InicializaProcessoSimulado(ProcessoSimulado* proc, int idProcesso, int idPr
 }
 
 void executaProximaInstrucao(ProcessoSimulado* proc) {
-    
+    Instrucao inst = proc->programa[proc->contadorPrograma]; // Pega a próxima instrucao
+    if(inst.i == 'N') {
+        instrucaoN(proc, inst);
+        ++proc->contadorPrograma;
+    } else if(inst.i == 'D') {
+        instrucaoD(proc, inst);
+        ++proc->contadorPrograma;
+    } else if(inst.i == 'V') {
+        instrucaoV(proc, inst);        
+        ++proc->contadorPrograma;
+    } else if(inst.i == 'A') {
+        instrucaoA(proc, inst);        
+        ++proc->contadorPrograma;
+    } else if(inst.i == 'S') {
+        instrucaoS(proc, inst);        
+        ++proc->contadorPrograma;
+    } else if(inst.i == 'B') {
+        
+        ++proc->contadorPrograma;
+    } else if(inst.i == 'T') {
+        
+        ++proc->contadorPrograma;
+    } else if(inst.i == 'F') {
+        
+    } else if(inst.i == 'R') {
+        instrucaoR(proc, inst);
+    }
 }
 
-void instrucaoA(ProcessoSimulado* proc, Instrucao *ins){
-    proc->programa->n1 += ins->n1;
+void instrucaoN(ProcessoSimulado* proc, Instrucao inst) {
+    proc->buffer = (int*) malloc(sizeof(int) * inst.n1);
 }
 
+void instrucaoD(ProcessoSimulado* proc, Instrucao inst){
+    proc->buffer[inst.n1] = 0;
+}
+
+void instrucaoV(ProcessoSimulado* proc, Instrucao inst){
+    proc->buffer[inst.n1] = inst.n2;
+}
+
+void instrucaoA(ProcessoSimulado* proc, Instrucao inst){
+    proc->buffer[inst.n1] += inst.n2;
+}
+
+void instrucaoS(ProcessoSimulado* proc, Instrucao inst){
+    proc->buffer[inst.n1] -= inst.n2;
+}
+
+// Incompleta -> Resulta em troca de contexto
 void instrucaoB(ProcessoSimulado* proc){
     //0 - bloqueado
     //1 - pronto
@@ -33,11 +78,15 @@ void instrucaoB(ProcessoSimulado* proc){
     proc->estado = 0;
 }
 
-void instrucaoD(ProcessoSimulado* proc, Instrucao ins){
-    proc->buffer = (int*) malloc(ins.n1*sizeof(int));
+// Incompleta -> Resulta em troca de contexto
+void instrucaoT(ProcessoSimulado* proc){
+    proc->estado = 3;
+    mostrarRelatorioProcesso(proc);
 }
 
+// Incorreta (Usar fork)
 void instrucaoF(ProcessoSimulado* proc, ProcessoSimulado *procCopia, int n){
+    /*
     procCopia->tempoCPU = proc->tempoCPU;
     procCopia->idProcesso = geraIdProcesso(&n);
     procCopia->estado = proc->estado;
@@ -47,125 +96,24 @@ void instrucaoF(ProcessoSimulado* proc, ProcessoSimulado *procCopia, int n){
     procCopia->idProcessoPai = proc->idProcesso;
     procCopia->prioridade = proc->prioridade;
     procCopia->tempoIncio = proc->tempoIncio;
-
+    */
 }
 
-int instrucaoN(Instrucao *ins){
-    return ins->n1;
-}
-
-void instrucaoR(ProcessoSimulado* proc, Instrucao instr){
-    proc->programa->num = instr.num;
-    proc->programa->n1 = instr.n1;
-    strcpy(proc->programa->arq, instr.arq);
-    proc->programa->i = instr.i;
-    proc->programa->n2 = instr.n2;
-}
-
-void instrucaoS(ProcessoSimulado* proc, Instrucao ins){
-    proc->programa->n1 -= ins.n1;
-}
-
-void instrucaoT(ProcessoSimulado* proc){
-    proc->estado = 3;
-    mostrarRelatorioProcesso(proc);
-}
-
-void instrucaoV(ProcessoSimulado* proc, Instrucao ins){
-    proc->programa->n1 = ins.n1;
+void instrucaoR(ProcessoSimulado* proc, Instrucao inst){
+    free(proc->programa);
+    free(proc->buffer);
+    lerArquivoPS(proc->programa, inst.arq);
+    proc->contadorPrograma = 0;
+    // Caso necessário pode executar a primeira instrução aqui chamando executaProximaInstrucao()
 }
 
 void mostrarRelatorioProcesso(ProcessoSimulado *proc){
-    printf("----- Processo Finalizado -----\n");
+    printf("----- Relatorio Processo -----\n");
     printf("PID: %d\n", proc->idProcesso);
     printf("Tempo em CPU: %d\n", proc->tempoCPU);
     printf("-------------------------------\n\n");
 }
 
-int geraIdProcesso(int *n){
-    return *n++;
+void incrementaTempo(ProcessoSimulado *proc) {
+    proc->tempoCPU++;
 }
-
-Instrucao* leArquivoDeInstrucoesPS(){
-    FILE *arq;
-    char c;
-    Instrucao *instrucoes = (Instrucao*)malloc(100* sizeof(Instrucao)); //Maximo de 100 instrucoes pra reduzir trabalho
-    int posInstr = 0;          //Qual a linha da instrucao (Max 100 linhas);
-
-
-    /*Qual o parametro que e: V(0) 0(1) 1000(2)
-     * 0 - i
-     * 1 - n1
-     * 2 - n2
-    */
-    int numeroParametro = 0;
-
-    char nomeDoArquivo[50];
-
-    printf("\nNome do arquivo: ");
-    scanf("%s", nomeDoArquivo);
-
-    nomeDoArquivo[strlen(nomeDoArquivo)] = '\0';
-
-    arq = fopen(nomeDoArquivo, "r");
-    if(arq == NULL){
-        printf("Arquivo não encontrado.\n");
-        return NULL;
-    }
-
-    while(1){
-        c = fgetc(arq);
-
-        if(c == 32) { //Se for espaco, e o pro proximo parametro
-            numeroParametro++;
-            c = fgetc(arq);
-
-        }else if (c == '\n') { //Se for quebra de linha, e a proxima instrucao
-            posInstr++;
-            numeroParametro = 0;
-            c = fgetc(arq);
-
-        }else if(c == EOF){
-            break;
-        }
-
-        switch (numeroParametro){
-
-            case 0:{
-                instrucoes[posInstr].i = c;
-                break;
-            }
-
-            case 1:{
-
-                if(instrucoes[posInstr].i != 'R'){
-                    instrucoes[posInstr].n1 = c;
-
-                }else{ //Se a instrucao for R entao tem que ler o nome do arquivo
-
-                    int cont = 0; //posicao de cada caracter
-                    while(1){
-                        c = fgetc(arq);
-                        if(c == '\n' || c == EOF){
-                            break;
-                        }
-                        instrucoes[posInstr].arq[cont] = c;
-                        cont++;
-                    }
-                }
-
-                break;
-            }
-
-            case 2:{
-                instrucoes[posInstr].n2 = (int)c;
-                break;
-            }
-
-        }
-    }
-
-    return instrucoes;
-
-}
-

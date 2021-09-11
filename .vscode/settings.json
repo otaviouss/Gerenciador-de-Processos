@@ -4,6 +4,8 @@
         "leitura.h": "c",
         "menu.h": "c",
         "pipe.h": "c",
-        "unistd.h": "c"
+        "unistd.h": "c",
+        "stdlib.h": "c",
+        "processosimulado.h": "c"
     }
 }
