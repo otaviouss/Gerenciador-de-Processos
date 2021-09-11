@@ -12,7 +12,7 @@ void inicializaCPU(CPU *cpu);
 
 void insereProcessoCPU(CPU *cpu, ProcessoSimulado p); 
 
-void executaProcessoCPU(CPU *cpu);
+char executaProcessoCPU(CPU *cpu);
 
 void pararProcessoCPU(CPU *cpu, ProcessoSimulado *p);
 

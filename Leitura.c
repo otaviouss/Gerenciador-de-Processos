@@ -105,13 +105,6 @@ void lerArquivoPS(Instrucao *instrucoes, char nomeDoArquivo[50]) {
     instrucoes = (Instrucao*)malloc(1000* sizeof(Instrucao)); //Maximo de 1000 instrucoes pra reduzir trabalho
     int posInstr = 0;          //Qual a linha da instrucao (Max 100 linhas);
 
-    /*Qual o parametro que e: V(0) 0(1) 1000(2)
-     * 0 - i
-     * 1 - n1
-     * 2 - n2
-    */
-    int numeroParametro = 0;
-
     nomeDoArquivo[strlen(nomeDoArquivo)] = '\0';
 
     arq = fopen(nomeDoArquivo, "r");

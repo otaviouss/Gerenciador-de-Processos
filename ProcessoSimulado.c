@@ -19,7 +19,7 @@ void InicializaProcessoSimulado(ProcessoSimulado* proc, int idProcesso, int idPr
         proc->tempoIncio = tempoIncio;
 }
 
-void executaProximaInstrucao(ProcessoSimulado* proc) {
+char executaProximaInstrucao(ProcessoSimulado* proc) {
     Instrucao inst = proc->programa[proc->contadorPrograma]; // Pega a próxima instrucao
     printf("Instrução Atual: %c\n", inst.i);
     if(inst.i == 'N') {
@@ -38,16 +38,20 @@ void executaProximaInstrucao(ProcessoSimulado* proc) {
         instrucaoS(proc, inst);        
         ++proc->contadorPrograma;
     } else if(inst.i == 'B') {
-        
+        instrucaoB(proc);
         ++proc->contadorPrograma;
+        return 'B';
     } else if(inst.i == 'T') {
-        
+        instrucaoT(proc);
         ++proc->contadorPrograma;
+        return 'T';
     } else if(inst.i == 'F') {
         
+        ++proc->contadorPrograma; //Não deve ficar aqui
     } else if(inst.i == 'R') {
         instrucaoR(proc, inst);
     }
+    return ' ';
 }
 
 void instrucaoN(ProcessoSimulado* proc, Instrucao inst) {
@@ -70,7 +74,6 @@ void instrucaoS(ProcessoSimulado* proc, Instrucao inst){
     proc->buffer[inst.n1] -= inst.n2;
 }
 
-// Incompleta -> Resulta em troca de contexto
 void instrucaoB(ProcessoSimulado* proc){
     //0 - bloqueado
     //1 - pronto

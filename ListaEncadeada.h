@@ -5,6 +5,7 @@ typedef struct Celula* Apontador;
 
 typedef struct Celula {
     int indiceProcesso;
+    int prioridade;
     struct Celula* pProx;
 } Celula;
 
@@ -17,7 +18,7 @@ void FLVazia(Lista* lista);
 
 int LehVazia(Lista* lista);
 
-int InsereIndice(Lista* lista, int indice);
+void InsereIndice(Lista* lista, int indice, int p);
 
 int RetiraIndice(Lista* lista, int* indice);
 

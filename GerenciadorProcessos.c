@@ -28,12 +28,11 @@ void inicializaGerenciador(GerenciadorProcessos *gProc) {
 void executaGerenciador(GerenciadorProcessos *gProc, Pipe *p) {
     ProcessoSimulado processo;
     Instrucao *inst;
-    char *instPipe;
-    int *buffer, i;
-    size_t tam;
+    int *buffer;
     CPU cpu;
+    char *instPipe;
 
-    printf("Criando Processo Simulado...");
+    printf("\nCriando Processo Simulado...\n");
 
     lerArquivoDeInstrucoesPS(&inst);
 
@@ -45,9 +44,19 @@ void executaGerenciador(GerenciadorProcessos *gProc, Pipe *p) {
     gProc->estadoExecucao = 0;
 
     lerPipe(p, &instPipe);
+  
+    executarProcessoSimulado(gProc, instPipe, 0, &cpu);
+
+}
+
+void executarProcessoSimulado(GerenciadorProcessos *gProc, char *instPipe, int indiceInst, CPU *cpu) {
+    int i, ind;
+    size_t tam;
+    char res;
+    ProcessoSimulado p;
 
     tam = strlen(instPipe);
-    for(i=0; i<tam; i++) {
+    for(i=indiceInst; i<tam; i++) {
         if(instPipe[i]=='U') {
             /* Ao receber um comando U, o gerenciador
                 executa a próxima instrução do processo
@@ -57,8 +66,20 @@ void executaGerenciador(GerenciadorProcessos *gProc, Pipe *p) {
                 faz o escalonamento. O escalonamento pode
                 envolver troca de contexto
             */
-           executaProcessoCPU(&cpu);
-           escalonarProcessos(gProc);
+            res = executaProcessoCPU(cpu);
+
+            if(res=='B') {
+                comandoB(gProc);
+                continue;
+            } else if(res=='T') {
+                pararProcessoCPU(cpu, &p);
+                retiraProcessoTabelaProcessos(gProc, gProc->estadoExecucao);
+                RetiraIndice(&gProc->estadoPronto, &ind);
+                insereProcessoCPU(&gProc->cpu, gProc->tabelaDeProcessos[i]);
+                gProc->estadoExecucao = ind;
+            } else {
+                escalonarProcessos(gProc);
+            }
         } else if(instPipe[i]=='L') {
             // Executa comando L
             comandoL(gProc);
@@ -70,7 +91,7 @@ void executaGerenciador(GerenciadorProcessos *gProc, Pipe *p) {
             processoImpressao(gProc);
             return;
         }
-    }   
+    } 
 }
 
 /** Ao receber um comando L, gerenciador de processos move o primeiro
@@ -79,31 +100,58 @@ void executaGerenciador(GerenciadorProcessos *gProc, Pipe *p) {
 void comandoL(GerenciadorProcessos *gProc) {
     int i;
     RetiraIndice(&gProc->estadoBloqueado, &i);
-    InsereIndice(&gProc->estadoPronto, i);
+    InsereIndice(&gProc->estadoPronto, i, gProc->tabelaDeProcessos[i].prioridade);
 }
 
-/** Troca de contexto envolve copiar o estado do processo simulado, atualmente em execução, 
- * de Cpu para TabelaDeProcessos (a não ser que esse processo tenha completado a sua execução)
- *  e copiar o estado do recém escalonado processo simulado de TabelaDeProcessos para Cpu.
-*/
-void trocaContexto(GerenciadorProcessos *gProc) {
+void comandoB(GerenciadorProcessos *gProc) {
     ProcessoSimulado *p;
     int i;
     pararProcessoCPU(&gProc->cpu, p);
     if(p != NULL) {
-        gProc->tabelaDeProcessos[gProc->ult] = *p;
-        gProc->ult++;
+        gProc->tabelaDeProcessos[gProc->estadoExecucao] = *p;
+        InsereIndice(&gProc->estadoBloqueado, gProc->estadoExecucao, gProc->tabelaDeProcessos[gProc->estadoExecucao].prioridade);
+        gProc->estadoExecucao = -1;
     }
     RetiraIndice(&gProc->estadoPronto, &i);
     insereProcessoCPU(&gProc->cpu, gProc->tabelaDeProcessos[i]);
+    gProc->estadoExecucao = i;
+}
+
+/** Troca de contexto envolve copiar o estado do processo simulado, atualmente em execução, 
+ * de Cpu para TabelaDeProcessos (a não ser que esse processo tenha completado a sua execução)
+ * e copiar o estado do recém escalonado processo simulado de TabelaDeProcessos para Cpu.
+*/
+void trocaContexto(GerenciadorProcessos *gProc) {
+    
 }
 
 void escalonarProcessos(GerenciadorProcessos *gProc) {
-
+    int i;
+    if(gProc->tabelaDeProcessos[gProc->estadoExecucao].prioridade == 0) {
+        gProc->tabelaDeProcessos[gProc->estadoExecucao].prioridade = 1;
+        trocaContexto(gProc);
+    } else if(gProc->tabelaDeProcessos[gProc->estadoExecucao].prioridade == 1 && gProc->tabelaDeProcessos[gProc->estadoExecucao].tempoCPU == 3) {
+        gProc->tabelaDeProcessos[gProc->estadoExecucao].prioridade = 2;
+        trocaContexto(gProc);
+    } else if(gProc->tabelaDeProcessos[gProc->estadoExecucao].prioridade == 2 && gProc->tabelaDeProcessos[gProc->estadoExecucao].tempoCPU == 7) {
+        gProc->tabelaDeProcessos[gProc->estadoExecucao].prioridade = 3;
+        trocaContexto(gProc);
+    } else if(gProc->tabelaDeProcessos[gProc->estadoExecucao].prioridade == 3) {
+        trocaContexto(gProc);
+    }
 }
 
 /** Inicia o processo impressão do máximo de informações possível
 */
 void processoImpressao(GerenciadorProcessos *gProc) {
     
+}
+
+void retiraProcessoTabelaProcessos(GerenciadorProcessos *gProc, int indice) {
+    ProcessoSimulado p;
+    while(indice<99) {
+        gProc->tabelaDeProcessos[indice] = gProc->tabelaDeProcessos[indice+1];
+        indice++;
+    }
+    gProc->tabelaDeProcessos[99] = p;
 }

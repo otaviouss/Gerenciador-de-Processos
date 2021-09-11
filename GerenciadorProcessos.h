@@ -20,7 +20,11 @@ void inicializaGerenciador(GerenciadorProcessos *gProc);
 
 void executaGerenciador(GerenciadorProcessos *gProc, Pipe *p);
 
+void executarProcessoSimulado(GerenciadorProcessos *gProc, char *instPipe, int indiceInst, CPU *cpu);
+
 void comandoL(GerenciadorProcessos *gProc);
+
+void comandoB(GerenciadorProcessos *gProc);
 
 void trocaContexto(GerenciadorProcessos *gProc);
 
@@ -29,5 +33,7 @@ void escalonarProcessos(GerenciadorProcessos *gProc);
 void processoImpressao(GerenciadorProcessos *gProc);
 
 void insereProgramaNoProcessoSimulado(Instrucao *instProcess, Instrucao *ins);
+
+void retiraProcessoTabelaProcessos(GerenciadorProcessos *gProc, int indice);
 
 #endif

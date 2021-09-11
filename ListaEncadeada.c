@@ -13,11 +13,28 @@ int LehVazia(Lista* lista) {
     return(lista->pPrimeiro == lista->pUltimo);
 }
 
-int InsereIndice(Lista* lista, int indice) {
-    lista->pUltimo->pProx = (Apontador) malloc(sizeof(Celula));
-    lista->pUltimo = lista->pUltimo->pProx;
-    lista->pUltimo->indiceProcesso = indice;
-    lista->pUltimo->pProx = NULL;
+void InsereIndice(Lista* lista, int indice, int p) {
+    Celula *atual, *prox;
+    atual = lista->pPrimeiro->pProx; 
+    while (atual->pProx->prioridade <= p) {
+        atual = atual->pProx;
+    }
+
+    if(atual == lista->pUltimo) {
+        lista->pUltimo->pProx = (Apontador) malloc(sizeof(Celula));
+        lista->pUltimo = lista->pUltimo->pProx;
+        lista->pUltimo->indiceProcesso = indice;
+        lista->pUltimo->prioridade = p;
+        lista->pUltimo->pProx = NULL;
+    } else {
+        prox = atual->pProx;
+        atual->pProx = (Apontador) malloc(sizeof(Celula));
+        atual = atual->pProx;
+        atual->pProx = prox;
+        atual->indiceProcesso = indice;
+        atual->prioridade = p;
+    }
+
 }
 
 int RetiraIndice(Lista* lista, int* indice) {

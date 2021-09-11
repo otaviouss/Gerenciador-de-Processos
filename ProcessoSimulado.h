@@ -19,7 +19,7 @@ void InicializaProcessoSimulado(ProcessoSimulado* proc, int idProcesso, int idPr
     int contadorPrograma, int *buffer, int prioridade, int estado, 
     int tempoIncio, int tempoCPU, Instrucao* programa);
 
-void executaProximaInstrucao(ProcessoSimulado* proc);
+char executaProximaInstrucao(ProcessoSimulado* proc);
 
 void instrucaoA(ProcessoSimulado* proc, Instrucao inst);
 
