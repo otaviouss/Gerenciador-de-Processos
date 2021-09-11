@@ -21,7 +21,7 @@ void menu(Pipe *p) {
                 lerTerminal(p);
                 return;
             case 2:
-                lerArquivo();
+                lerArquivo(p);
                 return;
             case 0:
                 break;

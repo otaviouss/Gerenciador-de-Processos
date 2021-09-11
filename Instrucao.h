@@ -1,7 +1,7 @@
 #ifndef INSTRUCAO_H
 #define INSTRUCAO_H
 
-typedef union {
+typedef struct {
     char i;
     int num;
     int n1;

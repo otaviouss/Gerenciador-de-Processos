@@ -30,4 +30,8 @@ void substituirImagem(GerenciadorProcessos *gProc, ProcessoSimulado *proc);
 
 void processoImpressao(GerenciadorProcessos *gProc);
 
+Instrucao* leArquivoDeInstrucoesGP();
+
+void insereProgramaNoProcessoSimulado(Instrucao *instProcess, Instrucao *ins);
+
 #endif

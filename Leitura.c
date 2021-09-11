@@ -3,6 +3,7 @@
 #include <string.h>
 
 #include "Leitura.h"
+#include "ProcessoSimulado.h"
 
 void lerTerminal(Pipe *p) {
     inicializarPipe(p);
@@ -14,6 +15,9 @@ void lerTerminal(Pipe *p) {
     char *buffer;
 }
 
-void lerArquivo() {
+void lerArquivo(Pipe *p) {
+    inicializarPipe(p);
 
+    //Tem que ajeitar melhor
+    leArquivoDeInstrucoesPS();
 }

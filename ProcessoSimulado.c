@@ -77,8 +77,8 @@ void instrucaoV(ProcessoSimulado* proc, Instrucao ins){
 
 void mostrarRelatorioProcesso(ProcessoSimulado *proc){
     printf("----- Processo Finalizado -----\n");
-    printf("PID: &d\n", proc->idProcesso);
-    printf("Tempo em CPU: &d\n", proc->tempoCPU);
+    printf("PID: %d\n", proc->idProcesso);
+    printf("Tempo em CPU: %d\n", proc->tempoCPU);
     printf("-------------------------------\n\n");
 }
 
@@ -89,7 +89,7 @@ int geraIdProcesso(int *n){
 Instrucao* leArquivoDeInstrucoesPS(){
     FILE *arq;
     char c;
-    Instrucao instrucoes[100]; //Maximo de 100 instrucoes pra reduzir trabalho
+    Instrucao *instrucoes = (Instrucao*)malloc(100* sizeof(Instrucao)); //Maximo de 100 instrucoes pra reduzir trabalho
     int posInstr = 0;          //Qual a linha da instrucao (Max 100 linhas);
 
 

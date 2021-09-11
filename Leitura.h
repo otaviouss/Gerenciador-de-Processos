@@ -5,6 +5,6 @@
 
 void lerTerminal(Pipe *p);
 
-void lerArquivo();
+void lerArquivo(Pipe *p);
 
 #endif
