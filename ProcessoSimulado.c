@@ -96,8 +96,40 @@ void instrucaoR(ProcessoSimulado* proc, Instrucao inst){
 void mostrarRelatorioProcesso(ProcessoSimulado *proc){
     printf("----- Relatorio Processo -----\n");
     printf("PID: %d\n", proc->idProcesso);
-    printf("Tempo em CPU: %d\n", proc->tempoCPU);
+    printf("Tempo em proc: %d\n", proc->tempoCPU);
     printf("Prioridade: %d\n", proc->prioridade);
+    printf("ID Processo pai: %d\n", proc->idProcessoPai);
+    printf("Contador de programa: %d\n", proc->contadorPrograma);
+
+    //0 - bloqueado
+    //1 - pronto
+    //2 - em execucao
+    //3 - morto
+
+    printf("Estado: ");
+    switch (proc->estado){
+        case 0:{
+            printf("Bloqueado\n");
+            break;
+        }
+
+        case 1:{
+            printf("Pronto\n");
+            break;
+        }
+
+        case 2:{
+            printf("Em execução\n");
+            break;
+        }
+
+        case 3:{
+            printf("Morto\n");
+            break;
+        }
+    }
+    printf("Tempo de inicio: %d\n", proc->tempoIncio);
+    printf("Tempo em proc: %d\n", proc->tempoCPU);
     printf("-------------------------------\n\n");
 }
 
