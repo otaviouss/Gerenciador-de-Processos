@@ -6,9 +6,9 @@
 
 void lerTerminal(Pipe *p);
 
-void lerArquivo(Pipe *p);
+int lerArquivo(Pipe *p);
 
-void lerArquivoDeInstrucoesPS(Instrucao **inst);
+int lerArquivoDeInstrucoesPS(Instrucao **inst);
 
 void lerArquivoPS(Instrucao *instrucoes, char nomeDoArquivo[50]); // Ler arquivo passando nome
 

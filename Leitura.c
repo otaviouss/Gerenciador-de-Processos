@@ -21,7 +21,7 @@ void lerTerminal(Pipe *p) {
 /** Lê instruções do processo controle para gerenciador de processos
  * por meio de arquivo
  */
-void lerArquivo(Pipe *p) {
+int lerArquivo(Pipe *p) {
     FILE *arq;
     char c;
     char nomeDoArquivo[50];
@@ -37,7 +37,7 @@ void lerArquivo(Pipe *p) {
     arq = fopen(nomeDoArquivo, "r");
     if(arq == NULL) {
         printf("Arquivo não encontrado.\n");
-        return;
+        return -1;
     }
 
     while(!feof(arq)){
@@ -45,13 +45,14 @@ void lerArquivo(Pipe *p) {
         escreverPipe(p, c);
         c = fgetc(arq); // Pega quebra de linha
     }
+    return 1;
 
 }
 
 /** Lê instruções de um processo simulado
  * por meio de arquivo
  */
-void lerArquivoDeInstrucoesPS(Instrucao **instrucoes) {
+int lerArquivoDeInstrucoesPS(Instrucao **instrucoes) {
     FILE *arq;
     char c;
     (*instrucoes) = (Instrucao*)malloc(1000* sizeof(Instrucao)); //Maximo de 1000 instrucoes pra reduzir trabalho
@@ -68,7 +69,7 @@ void lerArquivoDeInstrucoesPS(Instrucao **instrucoes) {
     arq = fopen(nomeDoArquivo, "r");
     if(arq == NULL){
         printf("Arquivo não encontrado.\n");
-        return;
+        return -1;
     }
 
     while(!feof(arq)){
@@ -84,16 +85,7 @@ void lerArquivoDeInstrucoesPS(Instrucao **instrucoes) {
         ++posInstr;
         c = fgetc(arq);
     }
-    /*
-    int i;
-    for(i=0;i<30;i++) {
-        printf("Instrucao %d\n", i);
-        printf("Char i: %c\n", instrucoes[i].i);
-        printf("Integer 1: %d\n", instrucoes[i].n1);
-        printf("Integer 2: %d\n", instrucoes[i].n2);
-        printf("Num: %d\n", instrucoes[i].num);
-        printf("Arquivo: %s\n\n", instrucoes[i].arq);
-    }*/
+    return 1;
 }
 
 void lerArquivoPS(Instrucao *instrucoes, char nomeDoArquivo[50]) {
