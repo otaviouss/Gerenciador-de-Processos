@@ -13,7 +13,7 @@ int LehVazia(Lista* lista) {
     return(lista->pPrimeiro == lista->pUltimo);
 }
 
-void InsereIndice(Lista* lista, int indice, int p) {
+void InsereIndiceOrdenado(Lista *lista, int indice, int p) {
     Celula *atual, *prox;
     atual = lista->pPrimeiro; 
     while (atual->pProx != NULL && atual->pProx->prioridade <= p) {
@@ -37,18 +37,26 @@ void InsereIndice(Lista* lista, int indice, int p) {
 
 }
 
+void InsereIndiceFIFO(Lista* lista, int indice, int p) {
+    lista->pUltimo->pProx = (Apontador) malloc(sizeof(Celula));
+    lista->pUltimo = lista->pUltimo->pProx;
+    lista->pUltimo->indiceProcesso = indice;
+    lista->pUltimo->prioridade = p;
+    lista->pUltimo->pProx = NULL;
+}
+
 int RetiraIndice(Lista* lista, int* indice) {
     Apontador pAux;
-    if(LehVazia(lista)) return 0;
+    if(LehVazia(lista)) return -1;
 
     *indice = lista->pPrimeiro->pProx->indiceProcesso;
     pAux = lista->pPrimeiro;
     lista->pPrimeiro = lista->pPrimeiro->pProx;
-    free(pAux);
+
     return 1;
 }
 
-void ImprimeLista(Lista* lista) {
+void ImprimeIndices(Lista* lista) {
     Apontador pAux;
     pAux = lista->pPrimeiro->pProx;
     while(pAux != NULL) {

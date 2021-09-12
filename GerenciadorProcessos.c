@@ -9,18 +9,11 @@
 #include "CPU.h"
 
 void inicializaGerenciador(GerenciadorProcessos *gProc) {
-    CPU cpu;
-    Lista listaPronto, listaBloqueado;
-
-    inicializaCPU(&cpu);
-    FLVazia(&listaPronto);
-    FLVazia(&listaBloqueado);
-
     gProc->tempo = 0;
-    gProc->cpu = cpu;
+    inicializaCPU(&gProc->cpu);
     gProc->tabelaDeProcessos = (ProcessoSimulado*) malloc(sizeof(ProcessoSimulado)*100);
-    gProc->estadoPronto = listaPronto;
-    gProc->estadoBloqueado = listaBloqueado;
+    FLVazia(&gProc->estadoPronto);
+    FLVazia(&gProc->estadoBloqueado);
     gProc->estadoExecucao = -1;
     gProc->ult = 0;
     gProc->indice = 0;
@@ -45,18 +38,23 @@ void executaGerenciador(GerenciadorProcessos *gProc, Pipe *p) {
 
     lerPipe(p, &instPipe);
   
-    executarProcessoSimulado(gProc, instPipe, 0);
+    executarProcessoSimulado(gProc, instPipe);
 
 }
 
-void executarProcessoSimulado(GerenciadorProcessos *gProc, char *instPipe, int indiceInst) {
+void executarProcessoSimulado(GerenciadorProcessos *gProc, char *instPipe) {
     int i, ind;
-    size_t tam;
     char res;
     ProcessoSimulado p;
 
-    tam = strlen(instPipe);
-    for(i=indiceInst; i<tam; i++) {
+    for(i=0; i<strlen(instPipe); i++) {
+        printf("%d %c ", i, instPipe[i]);
+        //printf("Estado Pronto: ");
+        //ImprimeIndices(&gProc->estadoPronto);
+        //printf("\n");
+        //printf("Estado Bloqueado: ");
+        //ImprimeIndices(&gProc->estadoBloqueado);
+        //printf("\n");
         if(instPipe[i]=='U') {
             /* Ao receber um comando U, o gerenciador
                 executa a próxima instrução do processo
@@ -84,9 +82,10 @@ void executarProcessoSimulado(GerenciadorProcessos *gProc, char *instPipe, int i
                     gProc->cpu.processo.contadorPrograma + 1, gProc->tabelaDeProcessos[gProc->estadoExecucao].buffer,
                     gProc->tabelaDeProcessos[gProc->estadoExecucao].prioridade, 1, gProc->cpu.unidadeTempo, 0, gProc->tabelaDeProcessos[gProc->estadoExecucao].programa);
 
-                gProc->cpu.processo.contadorPrograma += gProc->cpu.processo.programa[gProc->cpu.processo.contadorPrograma].n1 + 1;
+                alteraContadorPrograma(&gProc->cpu);
+                
+                InsereIndiceOrdenado(&(gProc->estadoPronto), gProc->ult, gProc->tabelaDeProcessos[gProc->ult].prioridade);
 
-                InsereIndice(&gProc->estadoPronto, gProc->ult, gProc->tabelaDeProcessos[gProc->ult].prioridade);
                 gProc->ult++;
             }
             escalonarProcessos(gProc);
@@ -110,12 +109,16 @@ void executarProcessoSimulado(GerenciadorProcessos *gProc, char *instPipe, int i
  * processo simulado da fila bloqueada para a fila de estado pronto para executar.
 */
 void comandoL(GerenciadorProcessos *gProc) {
-    int i;
+    int i, r;
 
     if(LehVazia(&gProc->estadoBloqueado)) return;
 
-    RetiraIndice(&gProc->estadoBloqueado, &i);
-    InsereIndice(&gProc->estadoPronto, i, gProc->tabelaDeProcessos[i].prioridade);
+    r = RetiraIndice(&gProc->estadoBloqueado, &i);
+   
+    if(r == -1) return;
+  
+    InsereIndiceOrdenado(&gProc->estadoPronto, i, gProc->tabelaDeProcessos[i].prioridade);
+
 }
 
 void comandoB(GerenciadorProcessos *gProc) {
@@ -123,7 +126,7 @@ void comandoB(GerenciadorProcessos *gProc) {
     int i;
     pararProcessoCPU(&gProc->cpu, &p);
     gProc->tabelaDeProcessos[gProc->estadoExecucao] = p;
-    InsereIndice(&gProc->estadoBloqueado, gProc->estadoExecucao, gProc->tabelaDeProcessos[gProc->estadoExecucao].prioridade);
+    InsereIndiceFIFO(&gProc->estadoBloqueado, gProc->estadoExecucao, gProc->tabelaDeProcessos[gProc->estadoExecucao].prioridade);
     gProc->estadoExecucao = -1;
     RetiraIndice(&gProc->estadoPronto, &i);
     insereProcessoCPU(&gProc->cpu, gProc->tabelaDeProcessos[i]);
@@ -142,7 +145,7 @@ void trocaContexto(GerenciadorProcessos *gProc) {
 
     pararProcessoCPU(&gProc->cpu, &p);
     gProc->tabelaDeProcessos[gProc->estadoExecucao] = p;
-    InsereIndice(&gProc->estadoBloqueado, gProc->estadoExecucao, gProc->tabelaDeProcessos[gProc->estadoExecucao].prioridade);
+    InsereIndiceFIFO(&gProc->estadoBloqueado, gProc->estadoExecucao, gProc->tabelaDeProcessos[gProc->estadoExecucao].prioridade);
     RetiraIndice(&gProc->estadoPronto, &i);
     insereProcessoCPU(&gProc->cpu, gProc->tabelaDeProcessos[i]);
     gProc->estadoExecucao = i;

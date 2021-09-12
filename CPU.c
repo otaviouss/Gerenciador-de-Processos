@@ -37,3 +37,7 @@ void mostrarProcessoCPU(CPU *cpu) {
     printf("-------------------------------\n\n");
     printf("Tempo Total: %d\n\n", cpu->unidadeTempo);
 }
+
+void alteraContadorPrograma(CPU *cpu) {
+    cpu->processo.contadorPrograma += cpu->processo.programa[cpu->processo.contadorPrograma].n1 + 1;
+}

@@ -9,6 +9,7 @@
  * por meio do terminal
  */
 void lerTerminal(Pipe *p) {
+    printf("Instruções PIPE");
     inicializarPipe(p);
     char c=' ';
     while(c != 'M') {
@@ -27,6 +28,7 @@ void lerArquivo(Pipe *p) {
 
     inicializarPipe(p);
 
+    printf("Instruções PIPE");
     printf("\nNome do arquivo: ");
     scanf("%s", nomeDoArquivo);
 
@@ -38,16 +40,10 @@ void lerArquivo(Pipe *p) {
         return;
     }
 
-    while(1){
-        c = fgetc(arq);
-
-        if (c == '\n') { //Se for quebra de linha, lê a proxima instrucao
-            c = fgetc(arq);
-        } else if(c == EOF){
-            break;
-        }
-
+    while(!feof(arq)){
+        fscanf(arq, "%c", &c); // Lê linha
         escreverPipe(p, c);
+        c = fgetc(arq); // Pega quebra de linha
     }
 
 }
@@ -63,6 +59,7 @@ void lerArquivoDeInstrucoesPS(Instrucao **instrucoes) {
 
     char nomeDoArquivo[50];
 
+    printf("Instruções Processo Simulado");
     printf("\nNome do arquivo: ");
     scanf("%s", nomeDoArquivo);
 
@@ -103,7 +100,7 @@ void lerArquivoPS(Instrucao *instrucoes, char nomeDoArquivo[50]) {
     FILE *arq;
     char c;
     instrucoes = (Instrucao*)malloc(1000* sizeof(Instrucao)); //Maximo de 1000 instrucoes pra reduzir trabalho
-    int posInstr = 0;          //Qual a linha da instrucao (Max 100 linhas);
+    int posInstr = 0;          //Qual a linha da instrucao (Max 1000 linhas);
 
     nomeDoArquivo[strlen(nomeDoArquivo)] = '\0';
 

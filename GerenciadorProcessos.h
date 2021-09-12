@@ -21,7 +21,7 @@ void inicializaGerenciador(GerenciadorProcessos *gProc);
 
 void executaGerenciador(GerenciadorProcessos *gProc, Pipe *p);
 
-void executarProcessoSimulado(GerenciadorProcessos *gProc, char *instPipe, int indiceInst);
+void executarProcessoSimulado(GerenciadorProcessos *gProc, char *instPipe);
 
 void comandoL(GerenciadorProcessos *gProc);
 

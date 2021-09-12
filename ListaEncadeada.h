@@ -18,7 +18,9 @@ void FLVazia(Lista* lista);
 
 int LehVazia(Lista* lista);
 
-void InsereIndice(Lista* lista, int indice, int p);
+void InsereIndiceOrdenado(Lista *lista, int indice, int p);
+
+void InsereIndiceFIFO(Lista* lista, int indice, int p);
 
 int RetiraIndice(Lista* lista, int* indice);
 

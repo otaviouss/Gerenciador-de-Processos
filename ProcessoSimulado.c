@@ -87,8 +87,6 @@ void instrucaoT(ProcessoSimulado* proc){
 }
 
 void instrucaoR(ProcessoSimulado* proc, Instrucao inst){
-    free(proc->programa);
-    free(proc->buffer);
     lerArquivoPS(proc->programa, inst.arq);
     proc->contadorPrograma = 0;
     // Caso necessário pode executar a primeira instrução aqui chamando executaProximaInstrucao()

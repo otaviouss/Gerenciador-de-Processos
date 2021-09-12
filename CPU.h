@@ -20,4 +20,6 @@ void comandoU(CPU *cpu);
 
 void mostrarProcessoCPU(CPU *cpu);
 
+void alteraContadorPrograma(CPU *cpu);
+
 #endif
