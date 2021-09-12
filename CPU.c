@@ -24,10 +24,8 @@ char executaProcessoCPU(CPU *cpu) {
 
     ret = executaProximaInstrucao(&cpu->processo);
     incrementaTempo(&cpu->processo);
-    if(ret != ' ') {
-        return ret;
-    }
-    return ' ';
+    
+    return ret;
 }
 
 void pararProcessoCPU(CPU *cpu, ProcessoSimulado *p) {

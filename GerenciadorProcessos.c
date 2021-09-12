@@ -41,7 +41,7 @@ void executaGerenciador(GerenciadorProcessos *gProc, Pipe *p) {
     while (tipo!=1 && tipo!=2)
     {
         printf("\nQual o tipo de escalonamento você deseja?\n");
-        printf("1. Escalonamento por Fração Justa\n");
+        printf("1. Escalonamento por Chaveamento Circular\n");
         printf("2. Escalonamento por Filas com classes de prioridades\n");
         scanf("%d", &tipo);
     }
@@ -60,12 +60,6 @@ void executarProcessoSimulado(GerenciadorProcessos *gProc, char *instPipe) {
 
     for(i=0; i<strlen(instPipe); i++) {
         printf("%d %c ", i+1, instPipe[i]);
-        //printf("Estado Pronto: ");
-        //ImprimeIndices(&gProc->estadoPronto);
-        //printf("\n");
-        //printf("Estado Bloqueado: ");
-        //ImprimeIndices(&gProc->estadoBloqueado);
-        //printf("\n\n");
 
         if(instPipe[i]=='U') {
             /* Ao receber um comando U, o gerenciador
@@ -106,7 +100,7 @@ void executarProcessoSimulado(GerenciadorProcessos *gProc, char *instPipe) {
             }
             if(res!='B') {
                 if(gProc->tipoEscalonamento == 1) {
-                    escalonarProcessosFracaoJusta(gProc);    
+                    escalonarProcessosChaveamentoCircular(gProc);    
                 } else {
                     escalonarProcessos(gProc);
                 }
@@ -116,7 +110,7 @@ void executarProcessoSimulado(GerenciadorProcessos *gProc, char *instPipe) {
             comandoL(gProc);
 
             if(gProc->tipoEscalonamento == 1) {
-                escalonarProcessosFracaoJusta(gProc);
+                escalonarProcessosChaveamentoCircular(gProc);
             } else {
                 escalonarProcessos(gProc);
             }
@@ -129,7 +123,7 @@ void executarProcessoSimulado(GerenciadorProcessos *gProc, char *instPipe) {
             // Executa impressão e termina
             printf("\nComando M\n");
             processoImpressao(gProc);
-            return;
+            return; //Termina a execução do programa
         }
     } 
 }
@@ -204,7 +198,7 @@ int trocaContexto(GerenciadorProcessos *gProc) {
     return 1;
 }
 
-void escalonarProcessosFracaoJusta(GerenciadorProcessos *gProc) {
+void escalonarProcessosChaveamentoCircular(GerenciadorProcessos *gProc) {
     if(gProc->cpu.processo.tempoAtualCPU >= 3 || gProc->cpu.processo.idProcesso == -1) {
         trocaContexto(gProc);
     }

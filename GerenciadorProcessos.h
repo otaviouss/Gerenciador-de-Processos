@@ -30,7 +30,7 @@ void comandoB(GerenciadorProcessos *gProc);
 
 int trocaContexto(GerenciadorProcessos *gProc);
 
-void escalonarProcessosFracaoJusta(GerenciadorProcessos *gProc);
+void escalonarProcessosChaveamentoCircular(GerenciadorProcessos *gProc);
 
 void escalonarProcessos(GerenciadorProcessos *gProc);
 
