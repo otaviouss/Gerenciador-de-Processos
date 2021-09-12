@@ -184,6 +184,7 @@ int trocaContexto(GerenciadorProcessos *gProc) {
     }
     RetiraIndice(&gProc->estadoPronto, &i);
     gProc->tabelaDeProcessos[i].estado = 2;
+
     insereProcessoCPU(&gProc->cpu, gProc->tabelaDeProcessos[i]);
     gProc->estadoExecucao = i;
 
@@ -230,10 +231,15 @@ void processoImpressao(GerenciadorProcessos *gProc) {
 
 void retiraProcessoTabelaProcessos(GerenciadorProcessos *gProc, int indice) {
     ProcessoSimulado p;
+
+    AtualizaIndices(&gProc->estadoBloqueado, indice);
+    AtualizaIndices(&gProc->estadoPronto, indice);
+
     while(indice<99) {
         gProc->tabelaDeProcessos[indice] = gProc->tabelaDeProcessos[indice+1];
         indice++;
     }
+
     gProc->cpu.processo.idProcesso = -1;
     gProc->tabelaDeProcessos[99] = p;
     gProc->ult--;

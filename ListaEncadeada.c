@@ -64,3 +64,14 @@ void ImprimeIndices(Lista* lista) {
         pAux = pAux->pProx;
     }
 }
+
+void AtualizaIndices(Lista *lista, int indice) {
+    Apontador pAux;
+
+    pAux = lista->pPrimeiro->pProx;
+    while(pAux != NULL) {
+        if(pAux->indiceProcesso > indice) pAux->indiceProcesso-=1;
+        pAux = pAux->pProx;
+    }
+
+}

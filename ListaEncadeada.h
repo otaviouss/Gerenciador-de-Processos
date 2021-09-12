@@ -26,4 +26,6 @@ int RetiraIndice(Lista* lista, int* indice);
 
 void ImprimeIndices(Lista* lista);
 
+void AtualizaIndices(Lista *lista, int indice);
+
 #endif
