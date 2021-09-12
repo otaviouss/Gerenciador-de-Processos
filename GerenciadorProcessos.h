@@ -15,6 +15,7 @@ typedef struct {
     int estadoExecucao;
     int ult; // marca a posição seguinte à última posição preenchida do vetor tabelaDeProcessos
     int indice; // ultimo indice utilizado
+    int tipoEscalonamento;
 } GerenciadorProcessos;
 
 void inicializaGerenciador(GerenciadorProcessos *gProc);
@@ -28,6 +29,8 @@ void comandoL(GerenciadorProcessos *gProc);
 void comandoB(GerenciadorProcessos *gProc);
 
 int trocaContexto(GerenciadorProcessos *gProc);
+
+void escalonarProcessosFracaoJusta(GerenciadorProcessos *gProc);
 
 void escalonarProcessos(GerenciadorProcessos *gProc);
 

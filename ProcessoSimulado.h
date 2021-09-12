@@ -12,6 +12,7 @@ typedef struct {
     int estado;
     int tempoIncio;
     int tempoCPU;
+    int tempoAtualCPU;
     Instrucao* programa; // Instruções a serem executadas
 } ProcessoSimulado;
 

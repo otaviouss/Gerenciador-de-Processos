@@ -9,9 +9,10 @@
  * por meio do terminal
  */
 void lerTerminal(Pipe *p) {
-    printf("\nInstruções PIPE");
+    printf("\nInstruções PIPE\n");
     inicializarPipe(p);
     char c=' ';
+    printf("Digite a entrada, um comando por linha: ");
     while(c != 'M') {
         scanf(" %c", &c);
         escreverPipe(p, c);

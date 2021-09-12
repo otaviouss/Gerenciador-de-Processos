@@ -17,6 +17,7 @@ void InicializaProcessoSimulado(ProcessoSimulado* proc, int idProcesso, int idPr
         proc->programa = programa;
         proc->tempoCPU = tempoCPU;
         proc->tempoIncio = tempoIncio;
+        proc->tempoAtualCPU = 0;
 }
 
 char executaProximaInstrucao(ProcessoSimulado* proc) {
@@ -96,7 +97,6 @@ void instrucaoR(ProcessoSimulado* proc, Instrucao inst){
 void mostrarRelatorioProcesso(ProcessoSimulado *proc){
     printf("----- Relatorio Processo -----\n");
     printf("PID: %d\n", proc->idProcesso);
-    printf("Tempo em proc: %d\n", proc->tempoCPU);
     printf("Prioridade: %d\n", proc->prioridade);
     printf("ID Processo pai: %d\n", proc->idProcessoPai);
     printf("Contador de programa: %d\n", proc->contadorPrograma);
@@ -129,10 +129,10 @@ void mostrarRelatorioProcesso(ProcessoSimulado *proc){
         }
     }
     printf("Tempo de inicio: %d\n", proc->tempoIncio);
-    printf("Tempo em proc: %d\n", proc->tempoCPU);
+    printf("Tempo em proc: %d\n", proc->tempoCPU + proc->tempoAtualCPU);
     printf("-------------------------------\n\n");
 }
 
 void incrementaTempo(ProcessoSimulado *proc) {
-    proc->tempoCPU++;
+    proc->tempoAtualCPU++;
 }

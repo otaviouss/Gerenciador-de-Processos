@@ -24,6 +24,7 @@ void executaGerenciador(GerenciadorProcessos *gProc, Pipe *p) {
     Instrucao *inst;
     int *buffer;
     char *instPipe;
+    int tipo=0;
 
     printf("\nCriando Processo Simulado...\n");
 
@@ -31,10 +32,20 @@ void executaGerenciador(GerenciadorProcessos *gProc, Pipe *p) {
 
     InicializaProcessoSimulado(&processo, 0, -1, 0, buffer, 0, 2, 0, 0, inst);
     gProc->tabelaDeProcessos[gProc->ult] = processo;
-    gProc->ult++;
     inicializaCPU(&gProc->cpu);
-    insereProcessoCPU(&gProc->cpu, processo);
+    gProc->tabelaDeProcessos[gProc->ult].estado = 2;
+    insereProcessoCPU(&gProc->cpu, gProc->tabelaDeProcessos[gProc->ult]);
     gProc->estadoExecucao = 0;
+    gProc->ult++;
+
+    while (tipo!=1 && tipo!=2)
+    {
+        printf("\nQual o tipo de escalonamento você deseja?\n");
+        printf("1. Escalonamento por Fração Justa\n");
+        printf("2. Escalonamento por Filas com classes de prioridades\n");
+        scanf("%d", &tipo);
+    }
+    gProc->tipoEscalonamento = tipo;
 
     lerPipe(p, &instPipe);
   
@@ -49,12 +60,13 @@ void executarProcessoSimulado(GerenciadorProcessos *gProc, char *instPipe) {
 
     for(i=0; i<strlen(instPipe); i++) {
         printf("%d %c ", i+1, instPipe[i]);
-        //printf("Estado Pronto: ");
-        //ImprimeIndices(&gProc->estadoPronto);
-        //printf("\n");
-        //printf("Estado Bloqueado: ");
-        //ImprimeIndices(&gProc->estadoBloqueado);
-        //printf("\n");
+        printf("Estado Pronto: ");
+        ImprimeIndices(&gProc->estadoPronto);
+        printf("\n");
+        printf("Estado Bloqueado: ");
+        ImprimeIndices(&gProc->estadoBloqueado);
+        printf("\n\n");
+
         if(instPipe[i]=='U') {
             /* Ao receber um comando U, o gerenciador
                 executa a próxima instrução do processo
@@ -84,12 +96,20 @@ void executarProcessoSimulado(GerenciadorProcessos *gProc, char *instPipe) {
 
                 alteraContadorPrograma(&gProc->cpu);
                 
-                InsereIndiceOrdenado(&(gProc->estadoPronto), gProc->ult, gProc->tabelaDeProcessos[gProc->ult].prioridade);
+                if(gProc->tipoEscalonamento == 1) {
+                    InsereIndiceFIFO(&(gProc->estadoPronto), gProc->ult, gProc->tabelaDeProcessos[gProc->ult].prioridade);
+                } else {
+                    InsereIndiceOrdenado(&(gProc->estadoPronto), gProc->ult, gProc->tabelaDeProcessos[gProc->ult].prioridade);
+                }
 
                 gProc->ult++;
-                escalonarProcessos(gProc);
-            } else {
-                escalonarProcessos(gProc);
+            }
+            if(res!='B') {
+                if(gProc->tipoEscalonamento == 1) {
+                    escalonarProcessosFracaoJusta(gProc);    
+                } else {
+                    escalonarProcessos(gProc);
+                }
             }
         } else if(instPipe[i]=='L') {
             // Executa comando L
@@ -97,11 +117,11 @@ void executarProcessoSimulado(GerenciadorProcessos *gProc, char *instPipe) {
         } else if(instPipe[i]=='I') {
             // Executa processo Impressão
             printf("\nComando I\n");
-            processoImpressao(gProc);
+            //processoImpressao(gProc);
         } else if(instPipe[i]=='M') {
             // Executa impressão e termina
             printf("\nComando M\n");
-            processoImpressao(gProc);
+            //processoImpressao(gProc);
             return;
         }
     } 
@@ -118,8 +138,12 @@ void comandoL(GerenciadorProcessos *gProc) {
     r = RetiraIndice(&gProc->estadoBloqueado, &i);
    
     if(r == -1) return;
-  
-    InsereIndiceOrdenado(&gProc->estadoPronto, i, gProc->tabelaDeProcessos[i].prioridade);
+    
+    if(gProc->tipoEscalonamento == 1) {
+        InsereIndiceFIFO(&gProc->estadoPronto, i, gProc->tabelaDeProcessos[i].prioridade);    
+    } else {
+        InsereIndiceOrdenado(&gProc->estadoPronto, i, gProc->tabelaDeProcessos[i].prioridade);
+    }
 
 }
 
@@ -127,10 +151,12 @@ void comandoB(GerenciadorProcessos *gProc) {
     ProcessoSimulado p;
     int i;
     pararProcessoCPU(&gProc->cpu, &p);
+    if(p.prioridade != 0) --p.prioridade; // Processo aumenta prioridade se bloqueado antes de terminar
     gProc->tabelaDeProcessos[gProc->estadoExecucao] = p;
     InsereIndiceFIFO(&gProc->estadoBloqueado, gProc->estadoExecucao, gProc->tabelaDeProcessos[gProc->estadoExecucao].prioridade);
     gProc->estadoExecucao = -1;
     RetiraIndice(&gProc->estadoPronto, &i);
+    gProc->tabelaDeProcessos[i].estado = 2;
     insereProcessoCPU(&gProc->cpu, gProc->tabelaDeProcessos[i]);
     gProc->estadoExecucao = i;
 }
@@ -150,26 +176,37 @@ int trocaContexto(GerenciadorProcessos *gProc) {
     pararProcessoCPU(&gProc->cpu, &p);
     if(p.idProcesso != -1) {
         gProc->tabelaDeProcessos[gProc->estadoExecucao] = p;
-        InsereIndiceOrdenado(&gProc->estadoPronto, gProc->estadoExecucao, gProc->tabelaDeProcessos[gProc->estadoExecucao].prioridade);
+        if(gProc->tipoEscalonamento == 1) {
+            InsereIndiceFIFO(&gProc->estadoPronto, gProc->estadoExecucao, gProc->tabelaDeProcessos[gProc->estadoExecucao].prioridade);  
+        } else {
+            InsereIndiceOrdenado(&gProc->estadoPronto, gProc->estadoExecucao, gProc->tabelaDeProcessos[gProc->estadoExecucao].prioridade);
+        }
     }
     RetiraIndice(&gProc->estadoPronto, &i);
+    gProc->tabelaDeProcessos[i].estado = 2;
     insereProcessoCPU(&gProc->cpu, gProc->tabelaDeProcessos[i]);
     gProc->estadoExecucao = i;
 
     return 1;
 }
 
+void escalonarProcessosFracaoJusta(GerenciadorProcessos *gProc) {
+    if(gProc->cpu.processo.tempoAtualCPU >= 3) {
+        trocaContexto(gProc);
+    }
+}
+
 void escalonarProcessos(GerenciadorProcessos *gProc) {
     if(gProc->cpu.processo.prioridade == 0) {
-        ++gProc->cpu.processo.prioridade;
+        gProc->cpu.processo.prioridade = 1;
         trocaContexto(gProc);
-    } else if(gProc->cpu.processo.prioridade == 1 && gProc->cpu.processo.tempoCPU > 1) {
-        ++gProc->cpu.processo.prioridade;
+    } else if(gProc->cpu.processo.prioridade == 1 && gProc->cpu.processo.tempoAtualCPU > 1) {
+        gProc->cpu.processo.prioridade = 2;
         trocaContexto(gProc);
-    } else if(gProc->cpu.processo.prioridade == 2 && gProc->cpu.processo.tempoCPU > 3) {
-        ++gProc->cpu.processo.prioridade;
+    } else if(gProc->cpu.processo.prioridade == 2 && gProc->cpu.processo.tempoAtualCPU > 3) {
+        gProc->cpu.processo.prioridade = 3;
         trocaContexto(gProc);
-    } else if(gProc->cpu.processo.prioridade == 3 && gProc->cpu.processo.tempoCPU > 7) {
+    } else if(gProc->cpu.processo.prioridade == 3 && gProc->cpu.processo.tempoAtualCPU > 7) {
         trocaContexto(gProc);
     }
 }

@@ -20,14 +20,16 @@ char executaProcessoCPU(CPU *cpu) {
 
     char ret;
     ret = executaProximaInstrucao(&cpu->processo);
+    incrementaTempo(&cpu->processo);
     if(ret != ' ') {
         return ret;
     }
-    incrementaTempo(&cpu->processo);
     return ' ';
 }
 
 void pararProcessoCPU(CPU *cpu, ProcessoSimulado *p) {
+    cpu->processo.tempoCPU += cpu->processo.tempoAtualCPU;
+    cpu->processo.tempoAtualCPU = 0;
     *p = cpu->processo;
     cpu->processo.idProcesso = -1;
 }
@@ -40,7 +42,6 @@ void mostrarProcessoCPU(CPU *cpu) {
     }
     printf("----- Relatorio Processo atualmente em execução -----\n");
     printf("PID: %d\n", cpu->processo.idProcesso);
-    printf("Tempo em CPU: %d\n", cpu->processo.tempoCPU);
     printf("Prioridade: %d\n", cpu->processo.prioridade);
     printf("ID Processo pai: %d\n", cpu->processo.idProcessoPai);
     printf("Contador de programa: %d\n", cpu->processo.contadorPrograma);
@@ -73,7 +74,7 @@ void mostrarProcessoCPU(CPU *cpu) {
         }
     }
     printf("Tempo de inicio: %d\n", cpu->processo.tempoIncio);
-    printf("Tempo em CPU: %d\n", cpu->processo.tempoCPU);
+    printf("Tempo em CPU: %d\n", cpu->processo.tempoCPU + cpu->processo.tempoAtualCPU);
     printf("-----------------------------------------------------\n\n");
     printf("Tempo Total: %d\n\n", cpu->unidadeTempo);
 }
