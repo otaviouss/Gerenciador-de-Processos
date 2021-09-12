@@ -9,7 +9,7 @@
  * por meio do terminal
  */
 void lerTerminal(Pipe *p) {
-    printf("Instruções PIPE");
+    printf("\nInstruções PIPE");
     inicializarPipe(p);
     char c=' ';
     while(c != 'M') {
@@ -28,7 +28,7 @@ void lerArquivo(Pipe *p) {
 
     inicializarPipe(p);
 
-    printf("Instruções PIPE");
+    printf("\nInstruções PIPE");
     printf("\nNome do arquivo: ");
     scanf("%s", nomeDoArquivo);
 
@@ -59,7 +59,7 @@ void lerArquivoDeInstrucoesPS(Instrucao **instrucoes) {
 
     char nomeDoArquivo[50];
 
-    printf("Instruções Processo Simulado");
+    printf("\nInstruções Processo Simulado");
     printf("\nNome do arquivo: ");
     scanf("%s", nomeDoArquivo);
 

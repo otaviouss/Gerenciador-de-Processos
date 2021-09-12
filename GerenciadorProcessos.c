@@ -43,12 +43,12 @@ void executaGerenciador(GerenciadorProcessos *gProc, Pipe *p) {
 }
 
 void executarProcessoSimulado(GerenciadorProcessos *gProc, char *instPipe) {
-    int i, ind;
+    int i, ind, ret;
     char res;
     ProcessoSimulado p;
 
     for(i=0; i<strlen(instPipe); i++) {
-        printf("%d %c ", i, instPipe[i]);
+        printf("%d %c ", i+1, instPipe[i]);
         //printf("Estado Pronto: ");
         //ImprimeIndices(&gProc->estadoPronto);
         //printf("\n");
@@ -70,25 +70,27 @@ void executarProcessoSimulado(GerenciadorProcessos *gProc, char *instPipe) {
                 comandoB(gProc);
                 continue;
             } else if(res=='T') {
-                pararProcessoCPU(&gProc->cpu, &p);
                 retiraProcessoTabelaProcessos(gProc, gProc->estadoExecucao);
-                RetiraIndice(&gProc->estadoPronto, &ind);
-                insereProcessoCPU(&gProc->cpu, gProc->tabelaDeProcessos[i]);
-                gProc->estadoExecucao = ind;
+                ret = trocaContexto(gProc);
+                if(ret==-1) {
+                    gProc->cpu.processo.idProcesso = -1;
+                }
             } else if(res=='F') {
                 // Cria novo processo
                 ++gProc->indice;
                 InicializaProcessoSimulado(&gProc->tabelaDeProcessos[gProc->ult], gProc->indice, gProc->tabelaDeProcessos[gProc->estadoExecucao].idProcesso,
-                    gProc->cpu.processo.contadorPrograma + 1, gProc->tabelaDeProcessos[gProc->estadoExecucao].buffer,
-                    gProc->tabelaDeProcessos[gProc->estadoExecucao].prioridade, 1, gProc->cpu.unidadeTempo, 0, gProc->tabelaDeProcessos[gProc->estadoExecucao].programa);
+                    gProc->cpu.processo.contadorPrograma + 1, gProc->cpu.processo.buffer,
+                    gProc->cpu.processo.prioridade, 1, gProc->cpu.unidadeTempo, 0, gProc->cpu.processo.programa);
 
                 alteraContadorPrograma(&gProc->cpu);
                 
                 InsereIndiceOrdenado(&(gProc->estadoPronto), gProc->ult, gProc->tabelaDeProcessos[gProc->ult].prioridade);
 
                 gProc->ult++;
+                escalonarProcessos(gProc);
+            } else {
+                escalonarProcessos(gProc);
             }
-            escalonarProcessos(gProc);
         } else if(instPipe[i]=='L') {
             // Executa comando L
             comandoL(gProc);
@@ -137,31 +139,37 @@ void comandoB(GerenciadorProcessos *gProc) {
  * de Cpu para TabelaDeProcessos (a não ser que esse processo tenha completado a sua execução)
  * e copiar o estado do recém escalonado processo simulado de TabelaDeProcessos para Cpu.
 */
-void trocaContexto(GerenciadorProcessos *gProc) {
+int trocaContexto(GerenciadorProcessos *gProc) {
     ProcessoSimulado p;
     int i;
 
-    if(LehVazia(&gProc->estadoPronto)) return;
+    if(LehVazia(&gProc->estadoPronto)) {
+        return -1;
+    }
 
     pararProcessoCPU(&gProc->cpu, &p);
-    gProc->tabelaDeProcessos[gProc->estadoExecucao] = p;
-    InsereIndiceFIFO(&gProc->estadoBloqueado, gProc->estadoExecucao, gProc->tabelaDeProcessos[gProc->estadoExecucao].prioridade);
+    if(p.idProcesso != -1) {
+        gProc->tabelaDeProcessos[gProc->estadoExecucao] = p;
+        InsereIndiceOrdenado(&gProc->estadoPronto, gProc->estadoExecucao, gProc->tabelaDeProcessos[gProc->estadoExecucao].prioridade);
+    }
     RetiraIndice(&gProc->estadoPronto, &i);
     insereProcessoCPU(&gProc->cpu, gProc->tabelaDeProcessos[i]);
     gProc->estadoExecucao = i;
+
+    return 1;
 }
 
 void escalonarProcessos(GerenciadorProcessos *gProc) {
     if(gProc->cpu.processo.prioridade == 0) {
         ++gProc->cpu.processo.prioridade;
         trocaContexto(gProc);
-    } else if(gProc->cpu.processo.prioridade == 1 && gProc->cpu.processo.tempoCPU == 3) {
+    } else if(gProc->cpu.processo.prioridade == 1 && gProc->cpu.processo.tempoCPU > 1) {
         ++gProc->cpu.processo.prioridade;
         trocaContexto(gProc);
-    } else if(gProc->cpu.processo.prioridade == 2 && gProc->cpu.processo.tempoCPU == 7) {
+    } else if(gProc->cpu.processo.prioridade == 2 && gProc->cpu.processo.tempoCPU > 3) {
         ++gProc->cpu.processo.prioridade;
         trocaContexto(gProc);
-    } else if(gProc->cpu.processo.prioridade == 3) {
+    } else if(gProc->cpu.processo.prioridade == 3 && gProc->cpu.processo.tempoCPU > 7) {
         trocaContexto(gProc);
     }
 }
@@ -177,6 +185,10 @@ void processoImpressao(GerenciadorProcessos *gProc) {
             mostrarRelatorioProcesso(&gProc->tabelaDeProcessos[i]);
         }
     }
+
+    if(gProc->cpu.processo.idProcesso == -1) {
+        mostrarProcessoCPU(&gProc->cpu);
+    }
 }
 
 void retiraProcessoTabelaProcessos(GerenciadorProcessos *gProc, int indice) {
@@ -185,6 +197,7 @@ void retiraProcessoTabelaProcessos(GerenciadorProcessos *gProc, int indice) {
         gProc->tabelaDeProcessos[indice] = gProc->tabelaDeProcessos[indice+1];
         indice++;
     }
+    gProc->cpu.processo.idProcesso = -1;
     gProc->tabelaDeProcessos[99] = p;
     gProc->ult--;
 }

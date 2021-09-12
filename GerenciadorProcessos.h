@@ -27,7 +27,7 @@ void comandoL(GerenciadorProcessos *gProc);
 
 void comandoB(GerenciadorProcessos *gProc);
 
-void trocaContexto(GerenciadorProcessos *gProc);
+int trocaContexto(GerenciadorProcessos *gProc);
 
 void escalonarProcessos(GerenciadorProcessos *gProc);
 

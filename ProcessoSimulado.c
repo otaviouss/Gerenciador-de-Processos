@@ -21,7 +21,7 @@ void InicializaProcessoSimulado(ProcessoSimulado* proc, int idProcesso, int idPr
 
 char executaProximaInstrucao(ProcessoSimulado* proc) {
     Instrucao inst = proc->programa[proc->contadorPrograma]; // Pega a próxima instrucao
-    printf("Instrução Atual: %c\n", inst.i);
+    printf("%d %d Instrução Atual: %c\n", proc->idProcesso, proc->prioridade, inst.i);
     if(inst.i == 'N') {
         instrucaoN(proc, inst);
         ++proc->contadorPrograma;
@@ -87,6 +87,7 @@ void instrucaoT(ProcessoSimulado* proc){
 }
 
 void instrucaoR(ProcessoSimulado* proc, Instrucao inst){
+    free(proc->programa);
     lerArquivoPS(proc->programa, inst.arq);
     proc->contadorPrograma = 0;
     // Caso necessário pode executar a primeira instrução aqui chamando executaProximaInstrucao()
