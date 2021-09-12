@@ -60,12 +60,12 @@ void executarProcessoSimulado(GerenciadorProcessos *gProc, char *instPipe) {
 
     for(i=0; i<strlen(instPipe); i++) {
         printf("%d %c ", i+1, instPipe[i]);
-        printf("Estado Pronto: ");
-        ImprimeIndices(&gProc->estadoPronto);
-        printf("\n");
-        printf("Estado Bloqueado: ");
-        ImprimeIndices(&gProc->estadoBloqueado);
-        printf("\n\n");
+        //printf("Estado Pronto: ");
+        //ImprimeIndices(&gProc->estadoPronto);
+        //printf("\n");
+        //printf("Estado Bloqueado: ");
+        //ImprimeIndices(&gProc->estadoBloqueado);
+        //printf("\n\n");
 
         if(instPipe[i]=='U') {
             /* Ao receber um comando U, o gerenciador
@@ -117,11 +117,11 @@ void executarProcessoSimulado(GerenciadorProcessos *gProc, char *instPipe) {
         } else if(instPipe[i]=='I') {
             // Executa processo Impressão
             printf("\nComando I\n");
-            //processoImpressao(gProc);
+            processoImpressao(gProc);
         } else if(instPipe[i]=='M') {
             // Executa impressão e termina
             printf("\nComando M\n");
-            //processoImpressao(gProc);
+            processoImpressao(gProc);
             return;
         }
     } 
