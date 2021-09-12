@@ -15,10 +15,13 @@ void insereProcessoCPU(CPU *cpu, ProcessoSimulado p) {
  * Executa próxima instrução do processo simulado
 */
 char executaProcessoCPU(CPU *cpu) {
+
+    char ret;
+
     cpu->unidadeTempo++;
     if(cpu->processo.idProcesso == -1) return ' ';
 
-    char ret;
+
     ret = executaProximaInstrucao(&cpu->processo);
     incrementaTempo(&cpu->processo);
     if(ret != ' ') {

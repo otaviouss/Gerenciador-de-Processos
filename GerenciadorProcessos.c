@@ -114,6 +114,13 @@ void executarProcessoSimulado(GerenciadorProcessos *gProc, char *instPipe) {
         } else if(instPipe[i]=='L') {
             // Executa comando L
             comandoL(gProc);
+
+            if(gProc->tipoEscalonamento == 1) {
+                escalonarProcessosFracaoJusta(gProc);
+            } else {
+                escalonarProcessos(gProc);
+            }
+
         } else if(instPipe[i]=='I') {
             // Executa processo Impressão
             printf("\nComando I\n");
@@ -150,15 +157,21 @@ void comandoL(GerenciadorProcessos *gProc) {
 void comandoB(GerenciadorProcessos *gProc) {
     ProcessoSimulado p;
     int i;
+    int retorno;
+
     pararProcessoCPU(&gProc->cpu, &p);
     if(p.prioridade != 0) --p.prioridade; // Processo aumenta prioridade se bloqueado antes de terminar
     gProc->tabelaDeProcessos[gProc->estadoExecucao] = p;
     InsereIndiceFIFO(&gProc->estadoBloqueado, gProc->estadoExecucao, gProc->tabelaDeProcessos[gProc->estadoExecucao].prioridade);
     gProc->estadoExecucao = -1;
-    RetiraIndice(&gProc->estadoPronto, &i);
+    retorno = RetiraIndice(&gProc->estadoPronto, &i);
     gProc->tabelaDeProcessos[i].estado = 2;
-    insereProcessoCPU(&gProc->cpu, gProc->tabelaDeProcessos[i]);
-    gProc->estadoExecucao = i;
+
+    if(retorno != -1){
+        insereProcessoCPU(&gProc->cpu, gProc->tabelaDeProcessos[i]);
+        gProc->estadoExecucao = i;
+    }
+
 }
 
 /** Troca de contexto envolve copiar o estado do processo simulado, atualmente em execução, 
@@ -192,7 +205,7 @@ int trocaContexto(GerenciadorProcessos *gProc) {
 }
 
 void escalonarProcessosFracaoJusta(GerenciadorProcessos *gProc) {
-    if(gProc->cpu.processo.tempoAtualCPU >= 3) {
+    if(gProc->cpu.processo.tempoAtualCPU >= 3 || gProc->cpu.processo.idProcesso == -1) {
         trocaContexto(gProc);
     }
 }
@@ -208,6 +221,8 @@ void escalonarProcessos(GerenciadorProcessos *gProc) {
         gProc->cpu.processo.prioridade = 3;
         trocaContexto(gProc);
     } else if(gProc->cpu.processo.prioridade == 3 && gProc->cpu.processo.tempoAtualCPU > 7) {
+        trocaContexto(gProc);
+    }else if(gProc->cpu.processo.idProcesso == -1){
         trocaContexto(gProc);
     }
 }
