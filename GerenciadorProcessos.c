@@ -59,9 +59,10 @@ void executarProcessoSimulado(GerenciadorProcessos *gProc, char *instPipe) {
     ProcessoSimulado p;
 
     for(i=0; i<strlen(instPipe); i++) {
-        printf("%d %c ", i+1, instPipe[i]);
+        // printf("%d %c ", i+1, instPipe[i]);
 
         if(instPipe[i]=='U') {
+            printf("\nComando U\n");
             /* Ao receber um comando U, o gerenciador
                 executa a próxima instrução do processo
                 simulado atualmente em execução, incrementa
@@ -107,6 +108,7 @@ void executarProcessoSimulado(GerenciadorProcessos *gProc, char *instPipe) {
             }
         } else if(instPipe[i]=='L') {
             // Executa comando L
+            printf("\nComando L\n");
             comandoL(gProc);
 
             if(gProc->tipoEscalonamento == 1) {

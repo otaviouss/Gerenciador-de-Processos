@@ -21,7 +21,7 @@ void lerPipe(Pipe *p, char **inst) {
         *inst = (char*) malloc(sizeof(char)*n);
         buffer[n] = 0;
         *inst = buffer;
-        printf("read %d bytes from the pipe: %s\n", n, *inst);
+        // printf("read %d bytes from the pipe: %s\n", n, *inst);
     } else {
         **inst = '0';
         perror("read");
