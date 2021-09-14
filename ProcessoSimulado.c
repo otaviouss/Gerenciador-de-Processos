@@ -23,6 +23,7 @@ void InicializaProcessoSimulado(ProcessoSimulado* proc, int idProcesso, int idPr
 char executaProximaInstrucao(ProcessoSimulado* proc) {
     Instrucao inst = proc->programa[proc->contadorPrograma]; // Pega a próxima instrucao
     // printf("%d %d Instrução Atual: %c\n", proc->idProcesso, proc->prioridade, inst.i);
+    printf("Instrução Atual: %c\n", inst.i);
     if(inst.i == 'N') {
         instrucaoN(proc, inst);
         ++proc->contadorPrograma;
@@ -84,7 +85,7 @@ void instrucaoB(ProcessoSimulado* proc){
 
 void instrucaoT(ProcessoSimulado* proc){
     proc->estado = 3;
-    mostrarRelatorioProcesso(proc);
+    // mostrarRelatorioProcesso(proc);
 }
 
 void instrucaoR(ProcessoSimulado* proc, Instrucao inst){

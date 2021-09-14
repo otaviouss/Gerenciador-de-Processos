@@ -31,6 +31,7 @@ char executaProcessoCPU(CPU *cpu) {
 void pararProcessoCPU(CPU *cpu, ProcessoSimulado *p) {
     cpu->processo.tempoCPU += cpu->processo.tempoAtualCPU;
     cpu->processo.tempoAtualCPU = 0;
+    cpu->processo.estado = 1;
     *p = cpu->processo;
     cpu->processo.idProcesso = -1;
 }
